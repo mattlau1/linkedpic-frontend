@@ -5,7 +5,7 @@ body {
     padding: 0;
     width: 100vw;
     height: 100vh;
-    overflow: hidden;
+    overflow-x: hidden;
     font-family: 'Poppins', -apple-system, 'Open Sans', 'Helvetica Neue', sans-serif;
     color: white;
 }
@@ -19,13 +19,14 @@ main {
 
 /* Add your styles here */
 #bg {
-    background: url(/bg.png) no-repeat center center fixed;
+    background: url(/bg.png);
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
-    background-size: cover;
     height: 100%;
+    background-size: cover;
     z-index: -10;
+
 }
 
 #registration-form {
