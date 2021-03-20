@@ -19,7 +19,8 @@ main {
 
 /* Add your styles here */
 #bg {
-    background: url(/bg.png);
+    background: url(../bg4.jpg);
+    /* background: url(/bg.png); */
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -36,4 +37,8 @@ main {
 #copyright {
     position: absolute;
     bottom: 0;
+}
+
+#register-form {
+    display: none;
 }
