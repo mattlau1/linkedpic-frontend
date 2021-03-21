@@ -25,14 +25,13 @@ export const handleLogin = (api) => {
                     // successful register - send to login page
                     data.json().then((result) => {
                         createAlert("Login Successful", "success");
-                        window.location.hash = "#/feed";
+                        window.location.hash = `#/feed/${result.token}`;
                         console.log(result);
                     });
                 }
             })
             .catch((error) => {
                 console.log(error);
-                // createAlert(`Error: ${error}`, "danger");
             });
     });
 };

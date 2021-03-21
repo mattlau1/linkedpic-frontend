@@ -34,7 +34,7 @@ const login = {
 
                         <div class="row justify-content-center pb-2 pt-2">
                             <div class="col-10 text-center">
-                                <a id="loginbtn" href="#/feed" type="submit" class="btn btn-primary w-100">Log In</a>
+                                <a id="loginbtn" type="submit" class="btn btn-primary w-100">Log In</a>
                             </div>
                         </div>
                         <hr>
