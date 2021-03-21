@@ -44,7 +44,7 @@ const feed = {
             <div class="row md-12">
                 <div class="col-md-3"></div>
                 <div class="col-md-6 p-0">
-                    <img id="postimg" class="rounded" src="../bg4.jpg">
+                    <img id="postimg" class="rounded" src="https://raw.githubusercontent.com/mattlau1/jas/main/jas2.png">
                 </div>
                 <div class="col-md-3"></div>
             </div>
