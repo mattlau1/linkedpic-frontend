@@ -18,7 +18,7 @@ main {
 }
 
 /* Add your styles here */
-#bg {
+.bg {
     background: url(../bg4.jpg);
     /* background: url(/bg.png); */
     -webkit-background-size: cover;
@@ -39,6 +39,6 @@ main {
     bottom: 0;
 }
 
-#register-form {
+/* #register-form {
     display: none;
-}
+} */
