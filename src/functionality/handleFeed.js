@@ -4,7 +4,7 @@ import { fileToDataUrl } from "../helpers.js";
 export const handleFeed = (api) => {
     // remove background from feed page
     const body = document.getElementById("root");
-    body.classList.remove("bg");
+    // body.classList.remove("bg");
 
     const token = location.hash.match(new RegExp("/feed/(.*)/*"))[1];
     console.log(`Token ${token}`);

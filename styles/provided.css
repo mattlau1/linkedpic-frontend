@@ -38,7 +38,8 @@ main {
 }
 
 #feed {
-    background-color: gray;
+    background-color: rgba(20, 20, 20, 0.9);
+    border: 1px solid black;
 }
 
 #postimg {
