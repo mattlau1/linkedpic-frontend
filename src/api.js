@@ -24,6 +24,7 @@ export default class API {
     }
 
     /** @param {String} path */
+    /** @param {Object} body */
     postAPIRequest(path, body) {
         return fetch(`${this.url}/${path}`, {
             method: "POST",
@@ -32,6 +33,20 @@ export default class API {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(body),
+        });
+    }
+
+    /** @param {String} path */
+    /** @param {Object} query */
+    /** @param {String} token */
+    getAPIRequestTokenQuery(path, query, token) {
+        return fetch(`${this.url}/${path}/?` + new URLSearchParams(query), {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Token ${token}`,
+            },
         });
     }
 }

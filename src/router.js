@@ -28,6 +28,9 @@ const router = () => {
         {};
 
     // Render the component in the "root" div
+
+    // NOTE TO SELF: NEED TO ADD ALL THE HTML TO INDEX
+    // AND TOGGLE VISIBLITY BASED ON PATH
     document.getElementById("root").innerHTML = component.render();
     if (path === "/register") {
         console.log("register page");

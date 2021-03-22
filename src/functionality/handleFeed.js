@@ -1,7 +1,7 @@
 import { createAlert } from "./createAlert.js";
-import { fileToDataUrl } from "../helpers.js";
 
 export const handleFeed = (api) => {
+    // get token from url
     const token = location.hash.match(new RegExp("/feed/(.*)/*"))[1];
     console.log(`Token ${token}`);
 
@@ -23,9 +23,11 @@ export const handleFeed = (api) => {
                     console.log(result.posts);
                     const feed = document.getElementById("feed");
                     result.posts.map((post) => {
+                        // author information section
                         const authorInfo = document.createElement("div");
-
                         authorInfo.classList.add("row", "md-12");
+
+                        // create left and right column gaps
                         const leftColGap = document.createElement("div");
                         leftColGap.classList.add("col-md-3", "col-xs-1");
 
@@ -40,41 +42,43 @@ export const handleFeed = (api) => {
                             "px-0"
                         );
 
+                        // author profile picture
                         const authorImg = document.createElement("img");
-
                         authorImg.classList.add("rounded-circle", "md-8");
                         authorImg.height = "50";
+                        authorImg.width = "50";
                         authorImg.src =
-                            "https://linustechtips.com/uploads/monthly_2018_11/736b0bdc7b30e8f79b17461e705593e7ad5df986_full.thumb.jpg.04f6b95a2461d12aca982596b23da1c3.jpg";
+                            "https://raw.githubusercontent.com/mattlau1/jas/main/jas.png";
 
+                        // author name
                         const authorName = document.createElement("p");
                         authorName.classList.add("d-inline");
                         authorName.id = "authorname";
 
-                        console.log(post.meta.published);
+                        // post date
                         const date = new Date(post.meta.published * 1000);
-                        const dateHours = date.getHours();
-                        const dateMinutes = "0" + date.getMinutes();
-                        const formattedTime =
-                            dateHours + ":" + dateMinutes.substr(-2);
                         authorName.innerText = `${
                             post.meta.author
                         } (${date.toLocaleDateString("en-GB")})`;
 
-                        const imgDiv = document.createElement("div");
-                        imgDiv.classList.add("col-md-6", "p-0");
+                        // post image container
+                        const imgContainer = document.createElement("div");
+                        imgContainer.classList.add("col-md-6", "p-0");
 
                         const postedImg = document.createElement("img");
-                        postedImg.classList.add("rounded");
+                        // postedImg.classList.add("rounded");
                         postedImg.id = "postimg";
                         postedImg.src = `data:image/jpg;base64,${post.src}`;
 
-                        const leftColGap2 = document.createElement("div");
-                        leftColGap2.classList.add("col-md-3", "col-xs-1");
+                        const likeContainer = document.createElement("div");
+                        likeContainer.classList.add("col-md-3", "col-xs-1");
+                        likeContainer.id = "likeContainer";
 
-                        const rightColGap2 = document.createElement("div");
-                        rightColGap2.classList.add("col-md-3", "col-xs-1");
+                        const commentContainer = document.createElement("div");
+                        commentContainer.classList.add("col-md-3", "col-xs-1");
+                        commentContainer.id = "commentContainer";
 
+                        // button area section
                         const buttonArea = document.createElement("div");
                         buttonArea.classList.add("row", "md-12", "p-0");
 
@@ -91,16 +95,23 @@ export const handleFeed = (api) => {
                             "text-center"
                         );
 
+                        // number of likes
                         const noLikes = document.createElement("span");
+
+                        // if the number of likes is 1 then show "1 Like"
+                        // else show "n Likes"
                         noLikes.innerText = ` ${post.meta.likes.length} ${
                             post.meta.likes.length === 1 ? "Like" : "Likes"
                         }`;
 
+                        // if the number of comments is 1 then show "1 Comment"
+                        // else show "n Comments"
                         const noComments = document.createElement("span");
                         noComments.innerText = ` ${post.comments.length} ${
                             post.comments.length === 1 ? "Comment" : "Comments"
                         }`;
 
+                        // buttons
                         const likeIcon = document.createElement("i");
                         likeIcon.classList.add("fas", "fa-heart");
 
@@ -108,15 +119,24 @@ export const handleFeed = (api) => {
                         commentIcon.classList.add("fas", "fa-comment");
 
                         const likeButton = document.createElement("button");
-                        likeButton.classList.add("btn", "btn-primary", "m-2");
+                        likeButton.classList.add("btn", "btn-dark", "m-2");
+                        likeButton.id = "likebtn";
+                        likeButton.setAttribute("data-bs-toggle", "modal");
+                        likeButton.setAttribute("data-bs-target", "#modal");
+                        likeButton.addEventListener("click", () => {
+                            setLikeModal(post.meta.likes, api, token);
+                        });
 
                         const commentButton = document.createElement("button");
-                        commentButton.classList.add(
-                            "btn",
-                            "btn-primary",
-                            "mr-2"
-                        );
+                        commentButton.classList.add("btn", "btn-dark", "mr-2");
+                        commentButton.id = "commentbtn";
+                        commentButton.setAttribute("data-bs-toggle", "modal");
+                        commentButton.setAttribute("data-bs-target", "#modal");
+                        commentButton.addEventListener("click", () => {
+                            setCommentModal(post.comments, api, token);
+                        });
 
+                        // post description area
                         const descriptionArea = document.createElement("div");
                         descriptionArea.classList.add("row", "md-12");
 
@@ -129,44 +149,37 @@ export const handleFeed = (api) => {
                         const descriptionText = document.createElement("p");
                         descriptionText.classList.add("d-inline");
 
-                        const hr = document.createElement("hr");
-                        hr.classList.add("mt-4", "mb-2");
+                        descriptionText.innerText = post.meta.description_text;
 
+                        // horizontal rule
+                        const hr = document.createElement("hr");
+                        hr.classList.add("mt-5", "mb-5");
+
+                        // stick everything together
                         authorInfoArea.appendChild(authorImg);
                         authorInfoArea.appendChild(authorName);
-
                         authorInfo.appendChild(leftColGap);
                         authorInfo.appendChild(authorInfoArea);
-
                         authorInfo.appendChild(rightColGap);
-
-                        descriptionText.innerText = post.meta.description_text;
                         descriptionDiv.appendChild(descriptionText);
-
                         descriptionArea.appendChild(leftColGap4);
                         descriptionArea.appendChild(descriptionDiv);
-
                         authorInfo.appendChild(descriptionArea);
-                        imgDiv.appendChild(postedImg);
-
                         likeButton.appendChild(likeIcon);
                         likeButton.appendChild(noLikes);
                         commentButton.appendChild(commentIcon);
                         commentButton.appendChild(noComments);
-
                         buttonContainer.appendChild(likeButton);
                         buttonContainer.appendChild(commentButton);
-
                         buttonArea.appendChild(leftColGap3);
                         buttonArea.appendChild(buttonContainer);
                         buttonArea.appendChild(rightColGap3);
-
-                        authorInfo.appendChild(leftColGap2);
-                        authorInfo.appendChild(imgDiv);
-                        authorInfo.appendChild(rightColGap2);
+                        imgContainer.appendChild(postedImg);
+                        authorInfo.appendChild(likeContainer);
+                        authorInfo.appendChild(imgContainer);
+                        authorInfo.appendChild(commentContainer);
                         authorInfo.appendChild(buttonArea);
                         authorInfo.appendChild(hr);
-
                         feed.appendChild(authorInfo);
                     });
                 });
@@ -178,36 +191,104 @@ export const handleFeed = (api) => {
     return;
 };
 
-{
-    /*
-<div class="row md-12">
-    <div class="col-md-3"></div>
-    <div class="col-md-6">
-        <img id="postauthorimg" class="rounded-circle md-8" height="50px"
-            src="https://raw.githubusercontent.com/mattlau1/jas/main/jas.png">
-        <p id="postauthorname" class="d-inline">Author Name</p>
-    </div>
-    <div class="col-md-3"></div>
-</div>
-<div class="row md-12">
-    <div class="col-md-3"></div>
-    <div id="postimg" class="col-md-6 p-0">
-        <img id="postimg" class="rounded" width="100%"
-            src="../bg4.jpg">
-    </div>
-    <div class="col-md-3"></div>
-</div>
-<div class="row md-12 p-0">
-    <div class="col-md-3 p-0"></div>
-    <div class="col-md-6 p-0">
-        <div class="container-fluid p-0">
-            <div class="row p-0">
-                <div class="col md-2 ">
-                    <button class="btn btn-primary"><i class="fas fa-heart"></i></button>
-                    <button class="btn btn-primary"><i class="fas fa-comment"></i></button>
-                </div>
-            </div>
-        </div>
-</div>
-*/
-}
+const setLikeModal = (userIds, api, token) => {
+    const header = document.getElementById("mainModal");
+    const body = document.getElementById("modal-text");
+    const likePost = document.getElementById("likePost");
+
+    // clear body of modal
+    body.innerText = "";
+    console.log(userIds);
+    if (userIds.length === 0) {
+        body.innerText = "Nobody has liked this post :(";
+    }
+
+    // for each user id in userIds
+    userIds.map((userId) => {
+        const likesDiv = document.createElement("div");
+        const query = {
+            id: userId,
+        };
+
+        // get username from user id
+        api.getAPIRequestTokenQuery("user", query, token)
+            .then((data) => {
+                if (data.status === 400) {
+                    createAlert("Malformed Request", "danger");
+                } else if (data.status === 403) {
+                    createAlert("Invalid Auth Token", "danger");
+                } else if (data.status === 404) {
+                    createAlert("User Not Found", "danger");
+                } else if (data.status === 200) {
+                    data.json().then((result) => {
+                        // add username to likes div
+                        console.log(result);
+                        likesDiv.innerText += result.username;
+                    });
+                }
+            })
+            .catch((error) => {
+                createAlert(
+                    "Error with showing likes - check console for more information",
+                    "danger"
+                );
+                console.log(error);
+            });
+
+        body.appendChild(likesDiv);
+    });
+
+    // show like button
+    likePost.style.display = "block";
+    // change header
+    header.innerText = "Liked By";
+};
+
+const setCommentModal = (userIds, api, token) => {
+    const header = document.getElementById("mainModal");
+    const body = document.getElementById("modal-text");
+    const likePost = document.getElementById("likePost");
+    likePost.style.display = "none";
+
+    // clear body of modal
+    body.innerText = "";
+
+    // for each user id in userIds
+    userIds.map((userId) => {
+        const likesDiv = document.createElement("div");
+        likesDiv.classList.add("display-6");
+        const query = {
+            id: userId,
+        };
+
+        // get username from user id
+        api.getAPIRequestTokenQuery("user", query, token)
+            .then((data) => {
+                if (data.status === 400) {
+                    createAlert("Malformed Request", "danger");
+                } else if (data.status === 403) {
+                    createAlert("Invalid Auth Token", "danger");
+                } else if (data.status === 404) {
+                    createAlert("User Not Found", "danger");
+                } else if (data.status === 200) {
+                    data.json().then((result) => {
+                        // add username to likes div
+                        console.log(result);
+                        likesDiv.innerText += result.username;
+                    });
+                }
+            })
+            .catch((error) => {
+                createAlert(
+                    "Error with showing likes - check console for more information",
+                    "danger"
+                );
+                console.log(error);
+            });
+
+        body.appendChild(likesDiv);
+    });
+
+    // change header
+    header.innerText = "Comments";
+};

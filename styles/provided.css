@@ -60,3 +60,18 @@ hr {
 #authorname {
     padding-left: 10px;
 }
+
+#likebtn,
+#commentbtn {
+    border: 1px solid white;
+}
+
+#likePost {
+    display: none;
+}
+
+.modal-body,
+.modal-header,
+.modal-footer {
+    background-color: #212529;
+}

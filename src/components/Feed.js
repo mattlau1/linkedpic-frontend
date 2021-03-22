@@ -33,6 +33,22 @@ const feed = {
 
         <div id="feed" class="container-md justify-content-center"></div>
 
+        <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="mainModal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title display-6" id="mainModal"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div id="modal-text" class="modal-body"></div>
+                <div id="modal-footer" class="modal-footer">
+                    <button id="likePost" type="button" class="btn btn-dark" data-bs-dismiss="modal"><i class="fas fa-heart"></i></button>
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
         <div id="alert-container" class="container-fluid m-0 p-0 position-absolute fixed-bottom">
             <div class="row justify-content-center">
                 <div id="alert-area" class="col-5 text-center mt-5 mb-0"></div>
