@@ -53,19 +53,12 @@ export const handleFeed = (api) => {
 
                         const authorName = document.createElement("p");
                         authorName.classList.add("d-inline");
+                        authorName.id = "authorname";
                         authorName.innerText = `${
                             post.meta.author
                         } on ${new Date(
                             post.meta.published * 1000
                         ).toLocaleDateString("en-US")}`;
-
-                        authorInfoArea.appendChild(authorImg);
-                        authorInfoArea.appendChild(authorName);
-
-                        authorInfo.appendChild(leftColGap);
-                        authorInfo.appendChild(authorInfoArea);
-
-                        authorInfo.appendChild(rightColGap);
 
                         const imgDiv = document.createElement("div");
                         imgDiv.classList.add("col-md-6", "p-0");
@@ -81,11 +74,97 @@ export const handleFeed = (api) => {
                         const rightColGap2 = document.createElement("div");
                         rightColGap2.classList.add("col-md-3");
 
+                        const buttonArea = document.createElement("div");
+                        buttonArea.classList.add("row", "md-12", "p-0");
+
+                        const leftColGap3 = document.createElement("div");
+                        leftColGap3.classList.add("col-md-3");
+
+                        const rightColGap3 = document.createElement("div");
+                        rightColGap3.classList.add("col-md-3");
+
+                        const buttonContainer = document.createElement("div");
+                        buttonContainer.classList.add(
+                            "col",
+                            "md-2",
+                            "text-center"
+                        );
+
+                        const noLikes = document.createElement("span");
+                        noLikes.innerText = ` ${post.meta.likes.length} ${
+                            post.meta.likes.length === 1 ? "Like" : "Likes"
+                        }`;
+                        console.log(post.meta.likes);
+                        const noComments = document.createElement("span");
+                        noComments.innerText = ` ${post.comments.length} ${
+                            post.comments.length === 1 ? "Comment" : "Comments"
+                        }`;
+
+                        const likeIcon = document.createElement("i");
+                        likeIcon.classList.add("fas", "fa-heart");
+
+                        const commentIcon = document.createElement("i");
+                        commentIcon.classList.add("fas", "fa-comment");
+
+                        const likeButton = document.createElement("button");
+                        likeButton.classList.add("btn", "btn-primary", "mx-2");
+
+                        const commentButton = document.createElement("button");
+                        commentButton.classList.add(
+                            "btn",
+                            "btn-primary",
+                            "mr-2"
+                        );
+
+                        const descriptionArea = document.createElement("div");
+                        descriptionArea.classList.add("row", "md-12");
+
+                        const leftColGap4 = document.createElement("div");
+                        leftColGap4.classList.add("col-md-3");
+
+                        const descriptionDiv = document.createElement("div");
+                        descriptionDiv.classList.add("col-md-6");
+
+                        const descriptionText = document.createElement("p");
+                        descriptionText.classList.add("d-inline");
+
+                        const hr = document.createElement("hr");
+                        hr.classList.add("mt-4", "mb-2");
+
+                        authorInfoArea.appendChild(authorImg);
+                        authorInfoArea.appendChild(authorName);
+
+                        authorInfo.appendChild(leftColGap);
+                        authorInfo.appendChild(authorInfoArea);
+
+                        authorInfo.appendChild(rightColGap);
+
+                        descriptionText.innerText = post.meta.description_text;
+                        descriptionDiv.appendChild(descriptionText);
+
+                        descriptionArea.appendChild(leftColGap4);
+                        descriptionArea.appendChild(descriptionDiv);
+
+                        authorInfo.appendChild(descriptionArea);
                         imgDiv.appendChild(postedImg);
+
+                        likeButton.appendChild(likeIcon);
+                        likeButton.appendChild(noLikes);
+                        commentButton.appendChild(commentIcon);
+                        commentButton.appendChild(noComments);
+
+                        buttonContainer.appendChild(likeButton);
+                        buttonContainer.appendChild(commentButton);
+
+                        buttonArea.appendChild(leftColGap3);
+                        buttonArea.appendChild(buttonContainer);
+                        buttonArea.appendChild(rightColGap3);
 
                         authorInfo.appendChild(leftColGap2);
                         authorInfo.appendChild(imgDiv);
                         authorInfo.appendChild(rightColGap2);
+                        authorInfo.appendChild(buttonArea);
+                        authorInfo.appendChild(hr);
 
                         feed.appendChild(authorInfo);
                     });
@@ -99,7 +178,8 @@ export const handleFeed = (api) => {
 };
 
 {
-    /* <div class="row md-12">
+    /*
+<div class="row md-12">
     <div class="col-md-3"></div>
     <div class="col-md-6">
         <img id="postauthorimg" class="rounded-circle md-8" height="50px"
@@ -127,5 +207,6 @@ export const handleFeed = (api) => {
                 </div>
             </div>
         </div>
-</div> */
+</div>
+*/
 }

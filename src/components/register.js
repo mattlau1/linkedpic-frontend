@@ -76,9 +76,9 @@ const register = {
                     </div>
                 </form>
             </div>
-            <div class="container m-0 p-0 position-absolute fixed-bottom">
+            <div id="alert-container" class="container m-0 p-0 position-absolute fixed-bottom">
                 <div class="row justify-content-center">
-                    <div id="alert-area" class="col-10 text-center mt-5 mb-4"></div>
+                    <div id="alert-area" class="col-5 text-center mt-5 mb-0"></div>
                 </div>
             </div>
         </div>

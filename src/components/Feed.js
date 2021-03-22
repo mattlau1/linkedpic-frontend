@@ -31,43 +31,14 @@ const feed = {
             </div>
         </nav>
 
-        <div id="feed" class="container-md justify-content-center">
-            <div class="row md-12">
-                <div class="col-md-3"></div>
-                <div class="col-md-6">
-                    <img id="postauthorimg" class="rounded-circle md-8" height="50px"
-                        src="https://raw.githubusercontent.com/mattlau1/jas/main/jas.png">
-                    <p id="postauthorname" class="d-inline">Author Name</p>
-                </div>
-                <div class="col-md-3"></div>
-            </div>
-            <div class="row md-12">
-                <div class="col-md-3"></div>
-                <div class="col-md-6 p-0">
-                    <img id="postimg" class="rounded" src="https://raw.githubusercontent.com/mattlau1/jas/main/jas2.png">
-                </div>
-                <div class="col-md-3"></div>
-            </div>
-            <div class="row md-12 p-0">
-                <div class="col-md-3 p-0"></div>
-                <div class="col-md-6 p-0">
-                    <div class="container-fluid p-0">
-                        <div class="row p-0">
-                            <div class="col md-2 ">
-                                <button class="btn btn-primary"><i class="fas fa-heart"></i></button>
-                                <button class="btn btn-primary"><i class="fas fa-comment"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3"></div>
-                <div class="container m-0 p-0 position-absolute fixed-bottom">
-                    <div class="row justify-content-center">
-                        <div id="alert-area" class="col-10 text-center mt-5 mb-4"></div>
-                    </div>
-                </div>
+        <div id="feed" class="container-md justify-content-center"></div>
+
+        <div id="alert-container" class="container-fluid m-0 p-0 position-absolute fixed-bottom">
+            <div class="row justify-content-center">
+                <div id="alert-area" class="col-5 text-center mt-5 mb-0"></div>
             </div>
         </div>
+
         `;
     },
 };

@@ -55,8 +55,8 @@ export const handleRegister = (api) => {
                 }
             })
             .catch((error) => {
+                createAlert(`${error}\nIs the backend running?`, "danger");
                 console.log(error);
-                // createAlert(`Error: ${error}`, "danger");
             });
     });
 };
