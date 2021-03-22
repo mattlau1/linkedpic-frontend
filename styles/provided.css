@@ -18,6 +18,11 @@ main {
 }
 
 /* Add your styles here */
+
+hr {
+    margin-top: 20px;
+}
+
 .bg {
     background: url(../bg4.jpg);
     -webkit-background-size: cover;
@@ -38,7 +43,7 @@ main {
 }
 
 #feed {
-    background-color: rgba(20, 20, 20, 0.9);
+    background-color: rgba(32, 33, 36, 0.8);
     border: 1px solid black;
 }
 
@@ -46,4 +51,12 @@ main {
     background-color: white;
     padding: 5px;
     width: 100%;
+}
+
+#alert-container {
+    pointer-events: none;
+}
+
+#authorname {
+    padding-left: 10px;
 }

@@ -2,10 +2,6 @@ import { createAlert } from "./createAlert.js";
 import { fileToDataUrl } from "../helpers.js";
 
 export const handleFeed = (api) => {
-    // remove background from feed page
-    const body = document.getElementById("root");
-    // body.classList.remove("bg");
-
     const token = location.hash.match(new RegExp("/feed/(.*)/*"))[1];
     console.log(`Token ${token}`);
 
@@ -31,10 +27,10 @@ export const handleFeed = (api) => {
 
                         authorInfo.classList.add("row", "md-12");
                         const leftColGap = document.createElement("div");
-                        leftColGap.classList.add("col-md-3");
+                        leftColGap.classList.add("col-md-3", "col-xs-1");
 
                         const rightColGap = document.createElement("div");
-                        rightColGap.classList.add("col-md-3");
+                        rightColGap.classList.add("col-md-3", "col-xs-1");
 
                         const authorInfoArea = document.createElement("div");
                         authorInfoArea.classList.add(
@@ -54,11 +50,16 @@ export const handleFeed = (api) => {
                         const authorName = document.createElement("p");
                         authorName.classList.add("d-inline");
                         authorName.id = "authorname";
+
+                        console.log(post.meta.published);
+                        const date = new Date(post.meta.published * 1000);
+                        const dateHours = date.getHours();
+                        const dateMinutes = "0" + date.getMinutes();
+                        const formattedTime =
+                            dateHours + ":" + dateMinutes.substr(-2);
                         authorName.innerText = `${
                             post.meta.author
-                        } on ${new Date(
-                            post.meta.published * 1000
-                        ).toLocaleDateString("en-US")}`;
+                        } (${date.toLocaleDateString("en-GB")})`;
 
                         const imgDiv = document.createElement("div");
                         imgDiv.classList.add("col-md-6", "p-0");
@@ -66,22 +67,22 @@ export const handleFeed = (api) => {
                         const postedImg = document.createElement("img");
                         postedImg.classList.add("rounded");
                         postedImg.id = "postimg";
-                        postedImg.src = "../../bg4.jpg";
+                        postedImg.src = `data:image/jpg;base64,${post.src}`;
 
                         const leftColGap2 = document.createElement("div");
-                        leftColGap2.classList.add("col-md-3");
+                        leftColGap2.classList.add("col-md-3", "col-xs-1");
 
                         const rightColGap2 = document.createElement("div");
-                        rightColGap2.classList.add("col-md-3");
+                        rightColGap2.classList.add("col-md-3", "col-xs-1");
 
                         const buttonArea = document.createElement("div");
                         buttonArea.classList.add("row", "md-12", "p-0");
 
                         const leftColGap3 = document.createElement("div");
-                        leftColGap3.classList.add("col-md-3");
+                        leftColGap3.classList.add("col-md-3", "col-xs-1");
 
                         const rightColGap3 = document.createElement("div");
-                        rightColGap3.classList.add("col-md-3");
+                        rightColGap3.classList.add("col-md-3", "col-xs-1");
 
                         const buttonContainer = document.createElement("div");
                         buttonContainer.classList.add(
@@ -94,7 +95,7 @@ export const handleFeed = (api) => {
                         noLikes.innerText = ` ${post.meta.likes.length} ${
                             post.meta.likes.length === 1 ? "Like" : "Likes"
                         }`;
-                        console.log(post.meta.likes);
+
                         const noComments = document.createElement("span");
                         noComments.innerText = ` ${post.comments.length} ${
                             post.comments.length === 1 ? "Comment" : "Comments"
@@ -107,7 +108,7 @@ export const handleFeed = (api) => {
                         commentIcon.classList.add("fas", "fa-comment");
 
                         const likeButton = document.createElement("button");
-                        likeButton.classList.add("btn", "btn-primary", "mx-2");
+                        likeButton.classList.add("btn", "btn-primary", "m-2");
 
                         const commentButton = document.createElement("button");
                         commentButton.classList.add(
@@ -120,7 +121,7 @@ export const handleFeed = (api) => {
                         descriptionArea.classList.add("row", "md-12");
 
                         const leftColGap4 = document.createElement("div");
-                        leftColGap4.classList.add("col-md-3");
+                        leftColGap4.classList.add("col-md-3", "col-xs-1");
 
                         const descriptionDiv = document.createElement("div");
                         descriptionDiv.classList.add("col-md-6");
