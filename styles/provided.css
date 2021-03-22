@@ -33,6 +33,13 @@ hr {
     z-index: -10;
 }
 
+.modal-body,
+.modal-header,
+.modal-footer,
+.modal-content {
+    background-color: #212529;
+}
+
 #registration-form {
     background-color: rgba(30, 30, 30, 0.7);
 }
@@ -55,6 +62,7 @@ hr {
 
 #alert-container {
     pointer-events: none;
+    z-index: 999999;
 }
 
 #authorname {
@@ -70,8 +78,21 @@ hr {
     display: none;
 }
 
-.modal-body,
-.modal-header,
-.modal-footer {
-    background-color: #212529;
+#commentauthor,
+#commentcontent {
+    padding: 0;
+    padding-left: 10px;
+    text-align: left;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+
+#commentdate {
+    padding: 0;
+    padding-right: 10px;
+    text-align: right;
+}
+
+#commenthr {
+    color: white;
 }

@@ -33,16 +33,16 @@ const feed = {
 
         <div id="feed" class="container-md justify-content-center"></div>
 
-        <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="mainModal" aria-hidden="true">
+        <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="main-modal" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title display-6" id="mainModal"></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title display-6" id="main-modal"></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div id="modal-text" class="modal-body"></div>
                 <div id="modal-footer" class="modal-footer">
-                    <button id="likePost" type="button" class="btn btn-dark" data-bs-dismiss="modal"><i class="fas fa-heart"></i></button>
+                    <button id="like-post-btn" type="button" class="btn btn-dark"><i id="likeicon" class="far fa-heart"></i></button>
                     <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
                 </div>
                 </div>
