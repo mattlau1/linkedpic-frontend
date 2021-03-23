@@ -44,12 +44,24 @@ hr {
     background-color: rgba(30, 30, 30, 0.7);
 }
 
+.commentcontent {
+    padding: 0;
+    padding-left: 10px;
+    text-align: left;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+
+.post-btn {
+    border: 1px solid white;
+}
+
 #copyright {
     position: absolute;
     bottom: 0;
 }
 
-#feed {
+.feed {
     background-color: rgba(32, 33, 36, 0.8);
     border: 1px solid black;
 }
@@ -65,26 +77,20 @@ hr {
     z-index: 999999;
 }
 
+#author-info {
+    cursor: pointer;
+}
+
+#following {
+    text-align: right;
+}
+
 #authorname {
     padding-left: 10px;
 }
 
-#likebtn,
-#commentbtn {
-    border: 1px solid white;
-}
-
 #likePost {
     display: none;
-}
-
-#commentauthor,
-#commentcontent {
-    padding: 0;
-    padding-left: 10px;
-    text-align: left;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
 }
 
 #commentdate {
@@ -95,4 +101,12 @@ hr {
 
 #commenthr {
     color: white;
+}
+
+#post-img {
+    width: 100%;
+}
+
+.posts {
+    margin-left: 0;
 }

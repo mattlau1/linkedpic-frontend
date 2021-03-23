@@ -1,8 +1,8 @@
 const Modal = {
     render: () => {
         // modal header
-        const modalHeaderText = document.createElement("h5");
-        modalHeaderText.className = "modal-title display-6";
+        const modalHeaderText = document.createElement("h4");
+        modalHeaderText.className = "modal-title";
         modalHeaderText.id = "main-modal";
 
         const modalHeaderCloseBtn = document.createElement("button");

@@ -12,6 +12,7 @@ const Alert = {
             "container-fluid m-0 p-0 position-absolute fixed-bottom";
         alertRow.appendChild(alert);
         alertContainer.appendChild(alertRow);
+        alertContainer.id = "alert";
 
         return alertContainer;
     },

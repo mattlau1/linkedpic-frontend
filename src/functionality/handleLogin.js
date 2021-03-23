@@ -1,10 +1,6 @@
 import { createAlert } from "./createAlert.js";
 
 export const handleLogin = (api) => {
-    // add background to login page
-    const body = document.getElementById("root");
-    body.classList.add("bg");
-
     document.getElementById("loginbtn").addEventListener("click", (e) => {
         e.preventDefault();
         const username = document.getElementById("usernameinput").value;
@@ -25,8 +21,9 @@ export const handleLogin = (api) => {
                     // successful register - send to login page
                     data.json().then((result) => {
                         createAlert("Login Successful", "success");
-                        window.location.hash = `#/feed/${result.token}`;
+                        window.location.hash = `#/feed`;
                         console.log(result);
+                        localStorage.setItem("token", result.token);
                     });
                 }
             })

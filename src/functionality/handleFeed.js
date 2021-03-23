@@ -1,26 +1,20 @@
 import { createAlert } from "./createAlert.js";
 
 export const handleFeed = (api) => {
-    // get token from url
-    const token = location.hash.match(new RegExp("/feed/(.*)/*"))[1];
+    // get token from localstorage
+    const token = localStorage.getItem("token");
     console.log(`Token ${token}`);
 
     // fetch user feed
-    fetch(`${api.url}/user/feed`, {
-        method: "GET",
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Token ${token}`,
-        },
-    })
+    api.getAPIRequestTokenQuery("user/feed", {}, token)
         .then((data) => {
-            if (data.status === 403) {
-                createAlert("Invalid Auth Token", "danger");
+            if (data.status === 403 || data.status === 400) {
+                // send user back to login screen
+                console.log("Invalid auth token");
+                window.location.hash = `#/login`;
             } else if (data.status === 200) {
                 // successful feed retrieval
                 data.json().then((result) => {
-                    createAlert("Successfully retrieved feed", "success");
                     console.log(result.posts);
                     const feed = document.getElementById("feed");
                     result.posts.map((post) => {
@@ -42,6 +36,11 @@ export const handleFeed = (api) => {
                             "m-0",
                             "px-0"
                         );
+                        authorInfoArea.id = "author-info";
+
+                        authorInfoArea.addEventListener("click", () => {
+                            window.location.hash = `#/profile/${post.meta.author}`;
+                        });
 
                         // author profile picture
                         const authorImg = document.createElement("img");
@@ -116,8 +115,12 @@ export const handleFeed = (api) => {
                         const likeIcon = document.createElement("i");
                         likeIcon.classList.add("fas", "fa-heart");
                         const likeButton = document.createElement("button");
-                        likeButton.classList.add("btn", "btn-dark", "m-2");
-                        likeButton.id = "likebtn";
+                        likeButton.classList.add(
+                            "btn",
+                            "btn-dark",
+                            "m-2",
+                            "post-btn"
+                        );
                         likeButton.setAttribute("data-bs-toggle", "modal");
                         likeButton.setAttribute("data-bs-target", "#modal");
                         likeButton.addEventListener("click", () => {
@@ -128,8 +131,13 @@ export const handleFeed = (api) => {
                         const commentIcon = document.createElement("i");
                         commentIcon.classList.add("fas", "fa-comment");
                         const commentButton = document.createElement("button");
-                        commentButton.classList.add("btn", "btn-dark", "mr-2");
-                        commentButton.id = "commentbtn";
+                        commentButton.classList.add(
+                            "btn",
+                            "btn-dark",
+                            "mr-2",
+                            "post-btn"
+                        );
+
                         commentButton.setAttribute("data-bs-toggle", "modal");
                         commentButton.setAttribute("data-bs-target", "#modal");
                         commentButton.addEventListener("click", () => {
@@ -190,12 +198,12 @@ export const handleFeed = (api) => {
     return;
 };
 
-// sets like information on modal
-// for given post
+// sets like information on modal for the given post
 const setLikeModal = (userIds, api, token, postId) => {
     const header = document.getElementById("main-modal");
     const body = document.getElementById("modal-text");
     const likeBtn = document.getElementById("like-post-btn");
+
     // clear body of modal
     body.innerText = "";
     console.log(userIds);
@@ -272,11 +280,11 @@ const handleLikeBtn = (postId, api, token) => {
         });
 };
 
-const setCommentModal = (comments, api, token) => {
+const setCommentModal = (comments) => {
     const header = document.getElementById("main-modal");
     const body = document.getElementById("modal-text");
-    const likePost = document.getElementById("like-post-btn");
-    likePost.style.display = "none";
+    const likeBtn = document.getElementById("like-post-btn");
+    likeBtn.style.display = "none";
 
     // clear body of modal
     body.innerText = "";
@@ -288,8 +296,7 @@ const setCommentModal = (comments, api, token) => {
 
         // set comment author
         const commentAuthor = document.createElement("div");
-        commentAuthor.classList.add("col-md-8", "fw-bold");
-        commentAuthor.id = "commentauthor";
+        commentAuthor.classList.add("col-md-8", "fw-bold", "commentcontent");
         commentAuthor.innerText = comment.author;
 
         // set comment date
@@ -302,8 +309,7 @@ const setCommentModal = (comments, api, token) => {
 
         // set comment content
         const commentContent = document.createElement("div");
-        commentContent.classList.add("col-md-12");
-        commentContent.id = "commentcontent";
+        commentContent.classList.add("col-md-12", "commentcontent");
         commentContent.innerText = comment.comment;
 
         // horizontal rule
