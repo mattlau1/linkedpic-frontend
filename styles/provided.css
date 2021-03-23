@@ -17,8 +17,6 @@ main {
     align-items: center;
 }
 
-/* Add your styles here */
-
 hr {
     margin-top: 20px;
 }
@@ -56,14 +54,19 @@ hr {
     border: 1px solid white;
 }
 
-#copyright {
-    position: absolute;
-    bottom: 0;
-}
-
 .feed {
     background-color: rgba(32, 33, 36, 0.8);
     border: 1px solid black;
+    min-height: 92vh;
+}
+
+.posts {
+    margin-left: 0;
+}
+
+#copyright {
+    position: absolute;
+    bottom: 0;
 }
 
 #postimg {
@@ -107,6 +110,6 @@ hr {
     width: 100%;
 }
 
-.posts {
-    margin-left: 0;
+#following {
+    cursor: pointer;
 }

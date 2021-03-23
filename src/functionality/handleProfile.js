@@ -54,11 +54,11 @@ export const handleProfile = (api) => {
                     followersStatContainer.className = "col-md-4";
 
                     const followersStat = document.createElement("div");
+
                     followersStat.className = "p2 profile-info text-center";
                     result.followed_num === 1
                         ? (followersStat.innerText = `${result.followed_num} Follower`)
                         : `${result.followed_num} Followers`;
-                    followersStat.id = "followers";
 
                     followersStatContainer.appendChild(followersStat);
 
@@ -69,8 +69,14 @@ export const handleProfile = (api) => {
                     followingStatContainer.className = "col-md-2";
 
                     const followingStat = document.createElement("div");
-                    followingStat.className = "p2 profile-info text-center";
+                    followingStat.id = "following";
+                    followingStat.setAttribute("data-bs-toggle", "modal");
+                    followingStat.setAttribute("data-bs-target", "#modal");
+                    followingStat.className =
+                        "p2 profile-info text-center fw-bold";
                     followingStat.innerText = `${result.following.length} Following`;
+
+                    setFollowingModal(result.following, api, token);
 
                     followingStatContainer.appendChild(followingStat);
 
@@ -126,6 +132,7 @@ export const handleProfile = (api) => {
         });
 };
 
+// adds profile images to page, given postids
 const addProfileImages = (postIds, api, token) => {
     postIds.map((postId) => {
         api.getAPIRequestTokenQuery("post", { id: postId }, token)
@@ -139,17 +146,20 @@ const addProfileImages = (postIds, api, token) => {
                 } else if (data.status === 200) {
                     data.json().then((result) => {
                         const postContainer = document.getElementById("posts");
-                        console.log(result);
 
                         const imgContainer = document.createElement("div");
                         imgContainer.className =
-                            "col-md-3 col-sm-8 mb-5 px-1 text-center";
+                            "col-md-3 col-sm-12 mb-1 px-1 text-center";
 
                         const img = document.createElement("img");
                         img.id = "post-img";
                         img.src = `data:image/jpg;base64,${result.src}`;
 
+                        const imgDescription = document.createElement("p");
+                        imgDescription.innerText = result.meta.description_text;
+
                         imgContainer.appendChild(img);
+                        imgContainer.appendChild(imgDescription);
 
                         postContainer.appendChild(imgContainer);
                     });
@@ -160,4 +170,42 @@ const addProfileImages = (postIds, api, token) => {
                 console.log(error);
             });
     });
+};
+
+// sets modal information to list of users that the user is following
+const setFollowingModal = (userIds, api, token) => {
+    const header = document.getElementById("main-modal");
+    const body = document.getElementById("modal-text");
+    const likeBtn = document.getElementById("like-post-btn");
+    likeBtn.style.display = "none";
+
+    // clear body of modal
+    body.innerText = "";
+
+    // for each user id, append user id's username to modal body
+    userIds.map((user) => {
+        api.getAPIRequestTokenQuery("user", { id: user }, token)
+            .then((data) => {
+                if (data.status === 400) {
+                    createAlert("Malformed Request", "danger");
+                } else if (data.status === 403) {
+                    createAlert("Invalid Auth Token", "danger");
+                } else if (data.status === 404) {
+                    createAlert("User Not Found", "danger");
+                } else if (data.status === 200) {
+                    data.json().then((result) => {
+                        const userContainer = document.createElement("p");
+                        userContainer.innerText = result.username;
+                        body.appendChild(userContainer);
+                    });
+                }
+            })
+            .catch((error) => {
+                createAlert("Error displaying following", "danger");
+                console.log(error);
+            });
+    });
+
+    // change header
+    header.innerText = `Following`;
 };
