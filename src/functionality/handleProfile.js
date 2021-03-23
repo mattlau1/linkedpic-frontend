@@ -41,6 +41,9 @@ export const handleProfile = (api) => {
                     const postStat = document.createElement("div");
                     postStat.className = "p2 profile-info text-center";
                     postStat.innerText = `${result.posts.length} Posts`;
+                    result.posts.length === 1
+                        ? (postStat.innerText = `${result.posts.length} Post`)
+                        : (postStat.innerText = `${result.posts.length} Posts`);
 
                     postStatContainer.appendChild(postStat);
 
@@ -52,7 +55,9 @@ export const handleProfile = (api) => {
 
                     const followersStat = document.createElement("div");
                     followersStat.className = "p2 profile-info text-center";
-                    followersStat.innerText = `${result.followed_num} Followers`;
+                    result.followed_num === 1
+                        ? (followersStat.innerText = `${result.followed_num} Follower`)
+                        : `${result.followed_num} Followers`;
                     followersStat.id = "followers";
 
                     followersStatContainer.appendChild(followersStat);
