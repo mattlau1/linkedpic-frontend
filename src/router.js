@@ -4,10 +4,10 @@ import { handleFeed } from "./functionality/handleFeed.js";
 import API from "./api.js";
 
 const routes = [
-    { path: "/", component: login },
-    { path: "/login", component: login },
-    { path: "/register", component: register },
-    { path: "/feed", component: feed },
+    { path: "/", component: Login },
+    { path: "/login", component: Login },
+    { path: "/register", component: Register },
+    { path: "/feed", component: Feed },
 ];
 
 const url = "http://localhost:5000";
@@ -31,7 +31,16 @@ const router = () => {
 
     // NOTE TO SELF: NEED TO ADD ALL THE HTML TO INDEX
     // AND TOGGLE VISIBLITY BASED ON PATH
-    document.getElementById("root").innerHTML = component.render();
+
+    // remove all children of root node
+    while (document.getElementById("root").firstChild) {
+        document.getElementById("root").firstChild.remove();
+    }
+
+    // append page and alert area to root node
+    document.getElementById("root").appendChild(component.render());
+    document.getElementById("root").appendChild(Alert.render());
+
     if (path === "/register") {
         console.log("register page");
         handleRegister(api);

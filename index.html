@@ -24,6 +24,7 @@
     <script type="module" src="src/api.js"></script>
 
     <!-- Components -->
+    <script src="src/components/Alert.js"></script>
     <script src="src/components/Login.js"></script>
     <script src="src/components/Register.js"></script>
     <script src="src/components/Feed.js"></script>
@@ -31,6 +32,12 @@
 </head>
 
 <body class="bg" id="root">
+
+    <div id="alert-container" class="container m-0 p-0 position-absolute fixed-bottom">
+        <div class="row justify-content-center">
+            <div id="alert-area" class="col-5 text-center mt-5 mb-0"></div>
+        </div>
+    </div>
     <!-- Bootstrap JS https://getbootstrap.com/ -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous">
