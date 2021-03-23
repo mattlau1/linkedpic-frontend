@@ -27,30 +27,34 @@ const router = () => {
         undefined ||
         {};
 
-    // Render the component in the "root" div
+    const root = document.getElementById("root");
 
-    // NOTE TO SELF: NEED TO ADD ALL THE HTML TO INDEX
-    // AND TOGGLE VISIBLITY BASED ON PATH
-
-    // remove all children of root node
-    while (document.getElementById("root").firstChild) {
-        document.getElementById("root").firstChild.remove();
+    // clear page by removing all children of root node
+    while (root.firstChild) {
+        root.firstChild.remove();
     }
-
-    // append page and alert area to root node
-    document.getElementById("root").appendChild(component.render());
-    document.getElementById("root").appendChild(Alert.render());
 
     if (path === "/register") {
         console.log("register page");
+        // append page and alert area to root node
+        root.appendChild(component.render());
+        root.appendChild(Alert.render());
         handleRegister(api);
     }
     if (path === "/login" || path === "/") {
         console.log("login page");
+        // append page and alert area to root node
+        root.appendChild(component.render());
+        root.appendChild(Alert.render());
         handleLogin(api);
     }
     if (path.startsWith("/feed")) {
         console.log("feed page");
+        // append page and alert area to root node
+        root.appendChild(Navbar.render());
+        root.appendChild(component.render());
+        root.appendChild(Alert.render());
+        root.appendChild(Modal.render());
         handleFeed(api);
     }
 };

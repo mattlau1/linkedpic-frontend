@@ -16,9 +16,3 @@ const Alert = {
         return alertContainer;
     },
 };
-
-/* <div id="alert-container" class="container-fluid m-0 p-0 position-absolute fixed-bottom">
-    <div class="row justify-content-center">
-        <div id="alert-area" class="col-5 text-center mt-5 mb-0"></div>
-    </div>
-</div> */
