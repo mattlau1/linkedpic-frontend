@@ -177,7 +177,9 @@ const setFollowingModal = (userIds, api, token) => {
     const header = document.getElementById("main-modal");
     const body = document.getElementById("modal-text");
     const likeBtn = document.getElementById("like-post-btn");
+    const modal = document.querySelector(".modal-dialog");
     likeBtn.style.display = "none";
+    modal.classList.remove("modal-lg");
 
     // clear body of modal
     body.innerText = "";
