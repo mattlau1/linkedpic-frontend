@@ -328,6 +328,8 @@ const handleProfileBtns = (followBtn, unfollowBtn, api, token) => {
 // turns follow button on, turns unfollow button off
 const setFollowButton = (followBtn, unfollowBtn, username, api, token) => {
     followBtn.addEventListener("click", () => {
+        followBtn.classList.add("d-none");
+        unfollowBtn.classList.remove("d-none");
         api.putAPIRequestTokenQuery(
             "user/follow",
             { username: username },
@@ -346,8 +348,6 @@ const setFollowButton = (followBtn, unfollowBtn, username, api, token) => {
                             `You are now following ${username}`,
                             "success"
                         );
-                        followBtn.classList.add("d-none");
-                        unfollowBtn.classList.remove("d-none");
                     });
                 }
             })
@@ -361,6 +361,8 @@ const setFollowButton = (followBtn, unfollowBtn, username, api, token) => {
 // turns unfollow button on, turns follow button off
 const setUnfollowButton = (followBtn, unfollowBtn, username, api, token) => {
     unfollowBtn.addEventListener("click", () => {
+        followBtn.classList.remove("d-none");
+        unfollowBtn.classList.add("d-none");
         api.putAPIRequestTokenQuery(
             "user/unfollow",
             { username: username },
@@ -379,8 +381,6 @@ const setUnfollowButton = (followBtn, unfollowBtn, username, api, token) => {
                             `You have now unfollowed ${username}`,
                             "success"
                         );
-                        followBtn.classList.remove("d-none");
-                        unfollowBtn.classList.add("d-none");
                     });
                 }
             })
@@ -415,7 +415,8 @@ const addProfilePostButtons = (api, token) => {
         // get post id from data-post-id attribute
         const postId = post.getAttribute("data-post-id");
         // remove button functionality
-        handleRemoveButton(removeButton, postId, post, api, token);
+        handleRemoveButtons(removeButton, postId, post, api, token);
+        handleEditButton(editButton, postId, post, api, token);
 
         post.appendChild(editButton);
         post.appendChild(removeButton);
@@ -424,7 +425,7 @@ const addProfilePostButtons = (api, token) => {
 
 // when remove button is clicked, sends delete request to backend
 // to remove post and then removes the post from the DOM
-const handleRemoveButton = (button, postId, post, api, token) => {
+const handleRemoveButtons = (button, postId, post, api, token) => {
     const postContainer = document.getElementById("posts");
     button.addEventListener("click", (e) => {
         e.preventDefault();
@@ -447,5 +448,28 @@ const handleRemoveButton = (button, postId, post, api, token) => {
                 createAlert("Error Removing Post", "danger");
                 console.log(error);
             });
+    });
+};
+
+const handleEditButton = (button, postId, post, api, token) => {
+    const postContainer = document.getElementById("posts");
+    button.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        // get text description from parent's child where
+        // child has img description class
+        const description = button.parentElement.querySelector(
+            ".profile-img-description"
+        );
+
+        const editField = document.createElement("input");
+        editField.className = "form-control me-2";
+        editField.type = "input";
+        editField.placeholder = "Search User (case-sensitive)";
+        editField.classList.remove("d-none");
+
+        // insert edit field above edit button
+        description.classList.add("d-none");
+        button.parentElement.insertBefore(editField, button);
     });
 };
