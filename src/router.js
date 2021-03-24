@@ -3,6 +3,7 @@ import { handleLogin } from "./functionality/handleLogin.js";
 import { handleFeed } from "./functionality/handleFeed.js";
 import { handleProfile } from "./functionality/handleProfile.js";
 import { handleNavbar } from "./functionality/handleNavbar.js";
+import { handleUpload } from "./functionality/handleUpload.js";
 import API from "./api.js";
 
 const routes = [
@@ -11,11 +12,11 @@ const routes = [
     { path: "/register", component: Register },
     { path: "/feed", component: Feed },
     { path: "/profile", component: Profile },
+    { path: "/upload", component: Upload },
 ];
 
 const url = "http://localhost:5000";
 const api = new API(url);
-let token = 0;
 
 // Simple SPA router by Raffaele Pizzari (used < 10 lines of code)
 // https://dev.to/pixari/build-a-very-basic-spa-javascript-router-2k4p
@@ -41,24 +42,26 @@ const router = () => {
         // append page and alert area to root node
         root.appendChild(component.render());
         handleRegister(api);
-    }
-    if (path === "/login" || path === "/") {
+    } else if (path === "/login" || path === "/") {
         // append page and alert area to root node
         root.appendChild(component.render());
         handleLogin(api);
-    }
-    if (path.startsWith("/feed")) {
+    } else if (path.startsWith("/feed")) {
         // append page and alert area to root node
         root.appendChild(Navbar.render());
         root.appendChild(component.render());
-        handleFeed(api);
         handleNavbar(api);
-    }
-    if (path.startsWith("/profile")) {
+        handleFeed(api);
+    } else if (path.startsWith("/profile")) {
         root.appendChild(Navbar.render());
         root.appendChild(Profile.render(api));
-        handleProfile(api);
         handleNavbar(api);
+        handleProfile(api);
+    } else if (path === "/upload") {
+        root.appendChild(Navbar.render());
+        root.appendChild(component.render(api));
+        handleNavbar(api);
+        handleUpload(api);
     }
 };
 

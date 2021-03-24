@@ -37,6 +37,21 @@ export default class API {
     }
 
     /** @param {String} path */
+    /** @param {Object} body */
+    /** @param {String} token */
+    postAPIRequest(path, body, token) {
+        return fetch(`${this.url}/${path}`, {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Token ${token}`,
+            },
+            body: JSON.stringify(body),
+        });
+    }
+
+    /** @param {String} path */
     /** @param {Object} query */
     /** @param {String} token */
     getAPIRequestTokenQuery(path, query, token) {

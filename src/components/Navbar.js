@@ -62,7 +62,7 @@ const Navbar = {
         const uploadNavLink = document.createElement("a");
         uploadNavLink.className = "nav-link";
         uploadNavLink.setAttribute("aria-current", "page");
-        uploadNavLink.href = "#/feed";
+        uploadNavLink.href = "#/upload";
 
         const uploadIcon = document.createElement("i");
         uploadIcon.className = "fas fa-camera";
