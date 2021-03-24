@@ -83,11 +83,32 @@ export const handleProfile = (api) => {
                     // stat container
                     const statContainer = document.createElement("div");
                     statContainer.className = "row md-12";
+                    statContainer.id = "stat-container";
 
                     statContainer.appendChild(leftColGap);
                     statContainer.appendChild(postStatContainer);
                     statContainer.appendChild(followersStatContainer);
                     statContainer.appendChild(followingStatContainer);
+
+                    // follow button
+                    const followBtnContainer = document.createElement("div");
+                    followBtnContainer.className = "col md-12 text-center";
+
+                    const followBtn = document.createElement("button");
+                    followBtn.className = "btn btn-dark d-none";
+                    followBtn.type = "button";
+                    followBtn.innerText = "Follow";
+
+                    // unfollow button
+                    const unfollowBtn = document.createElement("button");
+                    unfollowBtn.className = "btn btn-dark d-none";
+                    unfollowBtn.type = "button";
+                    unfollowBtn.innerText = "Unfollow";
+
+                    handleFollowBtns(followBtn, unfollowBtn, api, token);
+
+                    followBtnContainer.appendChild(followBtn);
+                    followBtnContainer.appendChild(unfollowBtn);
 
                     // horizontal rule
                     const hr = document.createElement("hr");
@@ -116,6 +137,7 @@ export const handleProfile = (api) => {
 
                     pageRowContainer.appendChild(usernameTextContainer);
                     pageRowContainer.appendChild(statContainer);
+                    pageRowContainer.appendChild(followBtnContainer);
                     pageRowContainer.appendChild(hr);
                     pageRowContainer.appendChild(postsTitleContainer);
                     pageRowContainer.appendChild(postContainer);
@@ -212,4 +234,150 @@ const setFollowingModal = (userIds, api, token) => {
 
     // change header
     header.innerText = `Following`;
+};
+
+// handles the follow button - allows current user to follow another user from
+// their profile page
+const handleFollowBtns = (followBtn, unfollowBtn, api, token) => {
+    const currPath = window.location.hash;
+    const username = currPath.substring(currPath.lastIndexOf("/") + 1);
+
+    // get information of current user and profile they are looking at
+    // if user is following the current user then show unfollow button
+    // also only show follow button if they are not looking at their own page
+
+    // first get information from profile
+    api.getAPIRequestTokenQuery("user", { username: username }, token)
+        .then((data) => {
+            if (data.status === 400) {
+                createAlert("Malformed Request", "danger");
+            } else if (data.status === 403) {
+                createAlert("Invalid Auth Token", "danger");
+            } else if (data.status === 404) {
+                createAlert(`User Not Found`, "danger");
+            } else if (data.status === 200) {
+                // get information for logged in user
+                data.json().then((profile) => {
+                    api.getAPIRequestTokenQuery("user", {}, token)
+                        .then((data) => {
+                            if (data.status === 200) {
+                                data.json().then((currUser) => {
+                                    const currFollowing = currUser.following;
+                                    const profileId = profile.id;
+
+                                    // add functionality to follow/unfollow
+                                    // buttons
+                                    setUnfollowButton(
+                                        followBtn,
+                                        unfollowBtn,
+                                        username,
+                                        api,
+                                        token
+                                    );
+                                    setFollowButton(
+                                        followBtn,
+                                        unfollowBtn,
+                                        username,
+                                        api,
+                                        token
+                                    );
+
+                                    // show button depending on following
+                                    // status
+                                    if (currFollowing.includes(profileId)) {
+                                        // user is currently following this user
+                                        unfollowBtn.classList.remove("d-none");
+                                    } else {
+                                        // user is not currently following this user
+                                        followBtn.classList.remove("d-none");
+                                    }
+
+                                    // user is on their own profile
+                                    if (currUser.username === username) {
+                                        followBtn.classList.add("d-none");
+                                        unfollowBtn.classList.add("d-none");
+                                    }
+                                });
+                            }
+                        })
+                        .catch((error) => {
+                            createAlert(
+                                "Error getting logged in user info",
+                                "danger"
+                            );
+                            console.log(error);
+                        });
+                });
+            }
+        })
+        .catch((error) => {
+            createAlert("Error getting profile user info", "danger");
+            console.log(error);
+        });
+};
+
+// turns follow button on, turns unfollow button off
+const setFollowButton = (followBtn, unfollowBtn, username, api, token) => {
+    followBtn.addEventListener("click", () => {
+        api.putAPIRequestTokenQuery(
+            "user/follow",
+            { username: username },
+            token
+        )
+            .then((data) => {
+                if (data.status === 400) {
+                    createAlert("You cannot follow yourself", "danger");
+                } else if (data.status === 403) {
+                    createAlert("Invalid Auth Token", "danger");
+                } else if (data.status === 404) {
+                    createAlert(`User Not Found`, "danger");
+                } else if (data.status === 200) {
+                    data.json().then(() => {
+                        createAlert(
+                            `You are now following ${username}`,
+                            "success"
+                        );
+                        followBtn.classList.add("d-none");
+                        unfollowBtn.classList.remove("d-none");
+                    });
+                }
+            })
+            .catch((error) => {
+                createAlert(`Error Following ${username}`, "danger");
+                console.log(error);
+            });
+    });
+};
+
+// turns unfollow button on, turns follow button off
+const setUnfollowButton = (followBtn, unfollowBtn, username, api, token) => {
+    unfollowBtn.addEventListener("click", () => {
+        api.putAPIRequestTokenQuery(
+            "user/unfollow",
+            { username: username },
+            token
+        )
+            .then((data) => {
+                if (data.status === 400) {
+                    createAlert("You cannot follow yourself", "danger");
+                } else if (data.status === 403) {
+                    createAlert("Invalid Auth Token", "danger");
+                } else if (data.status === 404) {
+                    createAlert(`User Not Found`, "danger");
+                } else if (data.status === 200) {
+                    data.json().then(() => {
+                        createAlert(
+                            `You have now unfollowed ${username}`,
+                            "success"
+                        );
+                        followBtn.classList.remove("d-none");
+                        unfollowBtn.classList.add("d-none");
+                    });
+                }
+            })
+            .catch((error) => {
+                createAlert(`Error Following ${username}`, "danger");
+                console.log(error);
+            });
+    });
 };

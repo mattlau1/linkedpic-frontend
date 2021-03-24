@@ -34,6 +34,8 @@ export const handleNavbar = (api) => {
                     // set navbar signout link
                     navbarSignout.href = `#/login`;
 
+                    // if there's text in the searchbar,
+                    // navigate to their profile when search button is clicked
                     navbarSearchBtn.addEventListener("click", (e) => {
                         e.preventDefault();
                         if (navbarSearchbar.value.length != 0) {

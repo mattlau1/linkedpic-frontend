@@ -137,3 +137,8 @@ i {
 #navbar-searchbar {
     width: 275px;
 }
+
+#stat-container {
+    margin-left: 0;
+    margin-bottom: 10px;
+}
