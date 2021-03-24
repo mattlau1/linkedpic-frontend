@@ -100,14 +100,14 @@ export const handleFeed = (api) => {
 
                         // if the number of likes is 1 then show "1 Like"
                         // else show "n Likes"
-                        noLikes.innerText = ` ${post.meta.likes.length} ${
+                        noLikes.innerText = `${post.meta.likes.length} ${
                             post.meta.likes.length === 1 ? "Like" : "Likes"
                         }`;
 
                         // if the number of comments is 1 then show "1 Comment"
                         // else show "n Comments"
                         const noComments = document.createElement("span");
-                        noComments.innerText = ` ${post.comments.length} ${
+                        noComments.innerText = `${post.comments.length} ${
                             post.comments.length === 1 ? "Comment" : "Comments"
                         }`;
 

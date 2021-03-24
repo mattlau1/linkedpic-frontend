@@ -1,4 +1,3 @@
-/* base styles, feel free to edit */
 html,
 body {
     margin: 0;
@@ -19,6 +18,10 @@ main {
 
 hr {
     margin-top: 20px;
+}
+
+i {
+    padding-right: 5px;
 }
 
 .bg {
@@ -62,6 +65,23 @@ hr {
 
 .posts {
     margin-left: 0;
+}
+
+.navbar-brand {
+    padding: 0;
+}
+
+.nav-item {
+    align-items: center;
+    display: flex;
+}
+
+.nav-link {
+    color: rgba(255, 255, 255, .55);
+}
+
+.nav-link:hover {
+    color: rgba(255, 255, 255, .75);
 }
 
 #copyright {
