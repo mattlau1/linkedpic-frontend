@@ -133,3 +133,7 @@ i {
 #following {
     cursor: pointer;
 }
+
+#navbar-searchbar {
+    width: 275px;
+}

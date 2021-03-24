@@ -16,17 +16,30 @@ export const handleNavbar = (api) => {
                     const navbarSignout = document.getElementById(
                         "navbar-signout"
                     );
+                    const navbarSearchBtn = document.getElementById(
+                        "navbar-searchbtn"
+                    );
+                    const navbarSearchbar = document.getElementById(
+                        "navbar-searchbar"
+                    );
 
                     // set profile navbar link
                     navbarProfile.href = `#/profile/${result.username}`;
 
-                    // remove token from localstorage
+                    // remove token from localstorage on signout
                     navbarSignout.addEventListener("click", () => {
                         localStorage.removeItem("token");
                     });
 
                     // set navbar signout link
                     navbarSignout.href = `#/login`;
+
+                    navbarSearchBtn.addEventListener("click", (e) => {
+                        e.preventDefault();
+                        if (navbarSearchbar.value.length != 0) {
+                            window.location.hash = `#/profile/${navbarSearchbar.value}`;
+                        }
+                    });
                 });
             }
         })

@@ -83,12 +83,14 @@ const Navbar = {
 
         const searchbar = document.createElement("input");
         searchbar.className = "form-control me-2";
+        searchbar.id = "navbar-searchbar";
         searchbar.type = "search";
-        searchbar.placeholder = "Search for user";
+        searchbar.placeholder = "Search User (case-sensitive)";
         searchbar.setAttribute("aria-label", "Search");
 
         const searchBtn = document.createElement("button");
         searchBtn.className = "btn btn-outline-light";
+        searchBtn.id = "navbar-searchbtn";
         searchBtn.type = "submit";
         searchBtn.innerText = "Search";
 
