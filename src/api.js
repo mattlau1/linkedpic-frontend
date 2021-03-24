@@ -78,4 +78,18 @@ export default class API {
             },
         });
     }
+
+    /** @param {String} path */
+    /** @param {Object} query */
+    /** @param {String} token */
+    deleteAPIRequestTokenQuery(path, query, token) {
+        return fetch(`${this.url}/${path}/?` + new URLSearchParams(query), {
+            method: "DELETE",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Token ${token}`,
+            },
+        });
+    }
 }

@@ -23,10 +23,12 @@ export const handleUpload = (api) => {
         }
     });
 
+    // submit/upload button functionality
     const uploadBtn = document.getElementById("upload-btn");
     uploadBtn.addEventListener("click", () => {
         const postDescription = document.getElementById("description").value;
 
+        // check if any fields are empty
         if (postDescription.length === 0) {
             createAlert("Please add a post description", "danger");
             return;
@@ -35,6 +37,7 @@ export const handleUpload = (api) => {
             return;
         }
 
+        // read file and upload image to backend
         const reader = new FileReader();
         reader.readAsDataURL(fileInput.files[0]);
         reader.onload = () => {

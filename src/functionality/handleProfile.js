@@ -105,8 +105,6 @@ export const handleProfile = (api) => {
                     unfollowBtn.type = "button";
                     unfollowBtn.innerText = "Unfollow";
 
-                    handleFollowBtns(followBtn, unfollowBtn, api, token);
-
                     followBtnContainer.appendChild(followBtn);
                     followBtnContainer.appendChild(unfollowBtn);
 
@@ -148,6 +146,8 @@ export const handleProfile = (api) => {
                     pageContainer.appendChild(pageRowContainer);
 
                     profile.appendChild(pageContainer);
+
+                    handleProfileBtns(followBtn, unfollowBtn, api, token);
                 });
             }
         })
@@ -171,26 +171,30 @@ const addProfileImages = (postIds, api, token) => {
                 } else if (data.status === 200) {
                     data.json().then((result) => {
                         const postContainer = document.getElementById("posts");
-
                         const imgContainer = document.createElement("div");
-                        imgContainer.className =
-                            "col-md-3 col-sm-12 mb-1 px-1 text-center";
 
+                        imgContainer.className =
+                            "col-md-3 col-sm-12 mb-1 px-1 text-center profile-img-container";
+                        imgContainer.setAttribute("data-post-id", result.id);
                         const img = document.createElement("img");
-                        img.id = "post-img";
+                        img.className = "post-img";
                         img.src = `data:image/jpg;base64,${result.src}`;
 
                         const imgDescription = document.createElement("p");
+
+                        imgDescription.className =
+                            "overflow-auto profile-img-description";
                         imgDescription.innerText = result.meta.description_text;
 
                         imgContainer.appendChild(img);
                         imgContainer.appendChild(imgDescription);
+
                         postContainer.appendChild(imgContainer);
                     });
                 }
             })
             .catch((error) => {
-                createAlert("Error displaying likes", "danger");
+                createAlert("Error displaying posts", "danger");
                 console.log(error);
             });
     });
@@ -236,17 +240,19 @@ const setFollowingModal = (userIds, api, token) => {
     header.innerText = `Following`;
 };
 
-// handles the follow button - allows current user to follow another user from
-// their profile page
-const handleFollowBtns = (followBtn, unfollowBtn, api, token) => {
+// handles all the buttons on a user's profile page
+const handleProfileBtns = (followBtn, unfollowBtn, api, token) => {
     const currPath = window.location.hash;
     const username = currPath.substring(currPath.lastIndexOf("/") + 1);
 
     // get information of current user and profile they are looking at
     // if user is following the current user then show unfollow button
-    // also only show follow button if they are not looking at their own page
+    // else show follow button
 
-    // first get information from profile
+    // only show follow/unfollow button
+    // if they are not looking at their own page
+
+    // first get information from user profile
     api.getAPIRequestTokenQuery("user", { username: username }, token)
         .then((data) => {
             if (data.status === 400) {
@@ -256,7 +262,7 @@ const handleFollowBtns = (followBtn, unfollowBtn, api, token) => {
             } else if (data.status === 404) {
                 createAlert(`User Not Found`, "danger");
             } else if (data.status === 200) {
-                // get information for logged in user
+                // then get information for current user (logged in user)
                 data.json().then((profile) => {
                     api.getAPIRequestTokenQuery("user", {}, token)
                         .then((data) => {
@@ -281,8 +287,9 @@ const handleFollowBtns = (followBtn, unfollowBtn, api, token) => {
                                         token
                                     );
 
-                                    // show button depending on following
-                                    // status
+                                    // show follow/unfollow button
+                                    // based on if current user is following
+                                    // or not
                                     if (currFollowing.includes(profileId)) {
                                         // user is currently following this user
                                         unfollowBtn.classList.remove("d-none");
@@ -292,9 +299,12 @@ const handleFollowBtns = (followBtn, unfollowBtn, api, token) => {
                                     }
 
                                     // user is on their own profile
+                                    // remove follow/unfollow buttons
+                                    // add edit and remove buttons
                                     if (currUser.username === username) {
                                         followBtn.classList.add("d-none");
                                         unfollowBtn.classList.add("d-none");
+                                        addProfilePostButtons(api, token);
                                     }
                                 });
                             }
@@ -376,6 +386,65 @@ const setUnfollowButton = (followBtn, unfollowBtn, username, api, token) => {
             })
             .catch((error) => {
                 createAlert(`Error Following ${username}`, "danger");
+                console.log(error);
+            });
+    });
+};
+
+// adds functionality to edit and remove buttons and adds them to the page
+// remove button removes post from the DOM
+const addProfilePostButtons = (api, token) => {
+    const imgContainer = document.querySelectorAll(".profile-img-container");
+    imgContainer.forEach((post) => {
+        // edit button
+        const editButton = document.createElement("button");
+        editButton.className = "btn btn-dark ms-2 btn-outline-light";
+
+        const editButtonIcon = document.createElement("i");
+        editButtonIcon.className = "fas fa-edit profile-icon";
+        editButton.appendChild(editButtonIcon);
+
+        // remove button
+        const removeButton = document.createElement("button");
+        removeButton.className = "btn btn-dark btn-outline-light ms-2";
+
+        const removeButtonIcon = document.createElement("i");
+        removeButtonIcon.className = "fas fa-trash profile-icon";
+        removeButton.appendChild(removeButtonIcon);
+
+        // get post id from data-post-id attribute
+        const postId = post.getAttribute("data-post-id");
+        // remove button functionality
+        handleRemoveButton(removeButton, postId, post, api, token);
+
+        post.appendChild(editButton);
+        post.appendChild(removeButton);
+    });
+};
+
+// when remove button is clicked, sends delete request to backend
+// to remove post and then removes the post from the DOM
+const handleRemoveButton = (button, postId, post, api, token) => {
+    const postContainer = document.getElementById("posts");
+    button.addEventListener("click", (e) => {
+        e.preventDefault();
+        postContainer.removeChild(post);
+        api.deleteAPIRequestTokenQuery("post", { id: postId }, token)
+            .then((data) => {
+                if (data.status === 400) {
+                    createAlert("Malformed Request", "danger");
+                } else if (data.status === 403) {
+                    createAlert("Invalid Auth Token", "danger");
+                } else if (data.status === 404) {
+                    createAlert("Post Not Found", "danger");
+                } else if (data.status === 200) {
+                    data.json().then(() => {
+                        createAlert("Successfully removed post", "success");
+                    });
+                }
+            })
+            .catch((error) => {
+                createAlert("Error Removing Post", "danger");
                 console.log(error);
             });
     });

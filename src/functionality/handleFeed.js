@@ -10,8 +10,10 @@ export const handleFeed = (api) => {
         .then((data) => {
             if (data.status === 403 || data.status === 400) {
                 // send user back to login screen
-                console.log("Invalid auth token");
-                window.location.hash = `#/login`;
+                createAlert(
+                    "Invalid Auth Token\nTry Logging In Again?",
+                    "danger"
+                );
             } else if (data.status === 200) {
                 // successful feed retrieval
                 data.json().then((result) => {
@@ -80,6 +82,7 @@ export const handleFeed = (api) => {
 
                         // button area section
                         const buttonArea = document.createElement("div");
+                        buttonArea.id = "button-area";
                         buttonArea.classList.add("row", "md-12", "p-0");
 
                         const leftColGap3 = document.createElement("div");
@@ -91,7 +94,7 @@ export const handleFeed = (api) => {
                         const buttonContainer = document.createElement("div");
                         buttonContainer.classList.add(
                             "col",
-                            "md-2",
+                            "md-6",
                             "text-center"
                         );
 
@@ -134,7 +137,6 @@ export const handleFeed = (api) => {
                         commentButton.classList.add(
                             "btn",
                             "btn-dark",
-                            "mr-2",
                             "post-btn"
                         );
 

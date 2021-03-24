@@ -18,7 +18,7 @@ const routes = [
 const url = "http://localhost:5000";
 const api = new API(url);
 
-// Simple SPA router by Raffaele Pizzari (used < 10 lines of code)
+// Based off Simple SPA router by Raffaele Pizzari (used < 10 lines of code)
 // https://dev.to/pixari/build-a-very-basic-spa-javascript-router-2k4p
 const router = () => {
     // Find the component based on the current path
@@ -38,16 +38,14 @@ const router = () => {
     root.appendChild(Alert.render());
     root.appendChild(Modal.render());
 
+    // check path and append components accordingly
     if (path === "/register") {
-        // append page and alert area to root node
         root.appendChild(component.render());
         handleRegister(api);
     } else if (path === "/login" || path === "/") {
-        // append page and alert area to root node
         root.appendChild(component.render());
         handleLogin(api);
-    } else if (path.startsWith("/feed")) {
-        // append page and alert area to root node
+    } else if (path === "/feed") {
         root.appendChild(Navbar.render());
         root.appendChild(component.render());
         handleNavbar(api);

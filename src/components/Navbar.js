@@ -135,7 +135,7 @@ const Navbar = {
         signOutNavLink.id = "navbar-signout";
         signOutNavLink.className = "nav-link";
         signOutNavLink.setAttribute("aria-current", "page");
-        signOutNavLink.href = "#/feed";
+        signOutNavLink.href = "#/login";
 
         const signOutIcon = document.createElement("i");
         signOutIcon.className = "fas fa-sign-out-alt";
