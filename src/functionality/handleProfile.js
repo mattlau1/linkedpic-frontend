@@ -265,8 +265,7 @@ const handleFollowBtns = (followBtn, unfollowBtn, api, token) => {
                                     const currFollowing = currUser.following;
                                     const profileId = profile.id;
 
-                                    // add functionality to follow/unfollow
-                                    // buttons
+                                    // add functionality to follow/unfollow buttons
                                     setUnfollowButton(
                                         followBtn,
                                         unfollowBtn,
