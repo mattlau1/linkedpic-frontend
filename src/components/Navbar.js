@@ -110,6 +110,7 @@ const Navbar = {
         profileNavItem.className = "nav-item";
 
         const profileNavLink = document.createElement("a");
+        profileNavLink.id = "navbar-profile";
         profileNavLink.className = "nav-link";
         profileNavLink.setAttribute("aria-current", "page");
         profileNavLink.href = "#/feed";
@@ -129,6 +130,7 @@ const Navbar = {
         signOutNavItem.className = "nav-item";
 
         const signOutNavLink = document.createElement("a");
+        signOutNavLink.id = "navbar-signout";
         signOutNavLink.className = "nav-link";
         signOutNavLink.setAttribute("aria-current", "page");
         signOutNavLink.href = "#/feed";

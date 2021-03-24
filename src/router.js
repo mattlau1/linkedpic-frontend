@@ -2,6 +2,7 @@ import { handleRegister } from "./functionality/handleRegister.js";
 import { handleLogin } from "./functionality/handleLogin.js";
 import { handleFeed } from "./functionality/handleFeed.js";
 import { handleProfile } from "./functionality/handleProfile.js";
+import { handleNavbar } from "./functionality/handleNavbar.js";
 import API from "./api.js";
 
 const routes = [
@@ -51,11 +52,13 @@ const router = () => {
         root.appendChild(Navbar.render());
         root.appendChild(component.render());
         handleFeed(api);
+        handleNavbar(api);
     }
     if (path.startsWith("/profile")) {
         root.appendChild(Navbar.render());
         root.appendChild(Profile.render(api));
         handleProfile(api);
+        handleNavbar(api);
     }
 };
 

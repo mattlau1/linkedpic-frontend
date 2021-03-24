@@ -58,7 +58,7 @@ export const handleProfile = (api) => {
                     followersStat.className = "p2 profile-info text-center";
                     result.followed_num === 1
                         ? (followersStat.innerText = `${result.followed_num} Follower`)
-                        : `${result.followed_num} Followers`;
+                        : (followersStat.innerText = `${result.followed_num} Followers`);
 
                     followersStatContainer.appendChild(followersStat);
 
@@ -95,6 +95,9 @@ export const handleProfile = (api) => {
                     const postsTitle = document.createElement("div");
                     postsTitle.className = "display-6 posts";
                     postsTitle.innerText = "Posts";
+                    if (result.posts.length === 0) {
+                        postsTitle.innerText = `${result.username} has no posts`;
+                    }
 
                     const postsTitleContainer = document.createElement("div");
                     postsTitleContainer.className = "row md-12";
@@ -160,7 +163,6 @@ const addProfileImages = (postIds, api, token) => {
 
                         imgContainer.appendChild(img);
                         imgContainer.appendChild(imgDescription);
-
                         postContainer.appendChild(imgContainer);
                     });
                 }

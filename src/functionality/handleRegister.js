@@ -1,10 +1,6 @@
 import { createAlert } from "./createAlert.js";
 
 export const handleRegister = (api) => {
-    // add background to registration page
-    const body = document.getElementById("root");
-    body.classList.add("bg");
-
     document.getElementById("registerbtn").addEventListener("click", (e) => {
         e.preventDefault();
         const firstName = document.getElementById("firstnameinput").value;
