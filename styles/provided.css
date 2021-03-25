@@ -105,6 +105,10 @@ i {
     padding-right: 0px;
 }
 
+.edit-field {
+    margin-bottom: 16px;
+}
+
 #copyright {
     position: absolute;
     bottom: 0;

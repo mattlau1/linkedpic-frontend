@@ -81,6 +81,22 @@ export default class API {
 
     /** @param {String} path */
     /** @param {Object} query */
+    /** @param {Object} body */
+    /** @param {String} token */
+    putAPIRequestTokenBody(path, query, body, token) {
+        return fetch(`${this.url}/${path}/?` + new URLSearchParams(query), {
+            method: "PUT",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Token ${token}`,
+            },
+            body: JSON.stringify(body),
+        });
+    }
+
+    /** @param {String} path */
+    /** @param {Object} query */
     /** @param {String} token */
     deleteAPIRequestTokenQuery(path, query, token) {
         return fetch(`${this.url}/${path}/?` + new URLSearchParams(query), {

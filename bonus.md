@@ -7,5 +7,5 @@
 ## User Search Bar
 - Users can search for other users via the search bar
 
-## Live Post Removal
-- The user can see their posts being removed from the page after clicking on the remove button.
+## Live Post Removal and Editing
+- Users can see their posts being edited or removed from the page (DOM) after clicking on the remove/edit button.

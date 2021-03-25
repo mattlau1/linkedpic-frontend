@@ -260,7 +260,7 @@ const handleProfileBtns = (followBtn, unfollowBtn, api, token) => {
             } else if (data.status === 403) {
                 createAlert("Invalid Auth Token", "danger");
             } else if (data.status === 404) {
-                createAlert(`User Not Found`, "danger");
+                createAlert("User Not Found", "danger");
             } else if (data.status === 200) {
                 // then get information for current user (logged in user)
                 data.json().then((profile) => {
@@ -272,14 +272,14 @@ const handleProfileBtns = (followBtn, unfollowBtn, api, token) => {
                                     const profileId = profile.id;
 
                                     // add functionality to follow/unfollow buttons
-                                    setUnfollowButton(
+                                    handleUnfollowButton(
                                         followBtn,
                                         unfollowBtn,
                                         username,
                                         api,
                                         token
                                     );
-                                    setFollowButton(
+                                    handleFollowButton(
                                         followBtn,
                                         unfollowBtn,
                                         username,
@@ -326,7 +326,7 @@ const handleProfileBtns = (followBtn, unfollowBtn, api, token) => {
 };
 
 // turns follow button on, turns unfollow button off
-const setFollowButton = (followBtn, unfollowBtn, username, api, token) => {
+const handleFollowButton = (followBtn, unfollowBtn, username, api, token) => {
     followBtn.addEventListener("click", () => {
         followBtn.classList.add("d-none");
         unfollowBtn.classList.remove("d-none");
@@ -359,10 +359,13 @@ const setFollowButton = (followBtn, unfollowBtn, username, api, token) => {
 };
 
 // turns unfollow button on, turns follow button off
-const setUnfollowButton = (followBtn, unfollowBtn, username, api, token) => {
+const handleUnfollowButton = (followBtn, unfollowBtn, username, api, token) => {
     unfollowBtn.addEventListener("click", () => {
+        // flip buttons
         followBtn.classList.remove("d-none");
         unfollowBtn.classList.add("d-none");
+
+        // send request to unfollow user
         api.putAPIRequestTokenQuery(
             "user/unfollow",
             { username: username },
@@ -391,45 +394,16 @@ const setUnfollowButton = (followBtn, unfollowBtn, username, api, token) => {
     });
 };
 
-// adds functionality to edit and remove buttons and adds them to the page
-// remove button removes post from the DOM
-const addProfilePostButtons = (api, token) => {
-    const imgContainer = document.querySelectorAll(".profile-img-container");
-    imgContainer.forEach((post) => {
-        // edit button
-        const editButton = document.createElement("button");
-        editButton.className = "btn btn-dark ms-2 btn-outline-light";
-
-        const editButtonIcon = document.createElement("i");
-        editButtonIcon.className = "fas fa-edit profile-icon";
-        editButton.appendChild(editButtonIcon);
-
-        // remove button
-        const removeButton = document.createElement("button");
-        removeButton.className = "btn btn-dark btn-outline-light ms-2";
-
-        const removeButtonIcon = document.createElement("i");
-        removeButtonIcon.className = "fas fa-trash profile-icon";
-        removeButton.appendChild(removeButtonIcon);
-
-        // get post id from data-post-id attribute
-        const postId = post.getAttribute("data-post-id");
-        // remove button functionality
-        handleRemoveButtons(removeButton, postId, post, api, token);
-        handleEditButton(editButton, postId, post, api, token);
-
-        post.appendChild(editButton);
-        post.appendChild(removeButton);
-    });
-};
-
 // when remove button is clicked, sends delete request to backend
 // to remove post and then removes the post from the DOM
-const handleRemoveButtons = (button, postId, post, api, token) => {
-    const postContainer = document.getElementById("posts");
+const handleRemoveButton = (button, postId, post, api, token) => {
     button.addEventListener("click", (e) => {
         e.preventDefault();
-        postContainer.removeChild(post);
+
+        // remove post from the DOM
+        document.getElementById("posts").removeChild(post);
+
+        // send delete request to remove the post
         api.deleteAPIRequestTokenQuery("post", { id: postId }, token)
             .then((data) => {
                 if (data.status === 400) {
@@ -451,25 +425,134 @@ const handleRemoveButtons = (button, postId, post, api, token) => {
     });
 };
 
-const handleEditButton = (button, postId, post, api, token) => {
-    const postContainer = document.getElementById("posts");
-    button.addEventListener("click", (e) => {
+// adds functionality to edit and remove buttons and adds them to the page
+// remove button removes post from the DOM
+const addProfilePostButtons = (api, token) => {
+    const imgContainer = document.querySelectorAll(".profile-img-container");
+    imgContainer.forEach((post) => {
+        // edit button
+        const editButton = document.createElement("button");
+        editButton.className = "btn btn-dark ms-2 btn-outline-light";
+
+        const editButtonIcon = document.createElement("i");
+        editButtonIcon.className = "fas fa-edit profile-icon";
+        editButton.appendChild(editButtonIcon);
+
+        // finish edit button
+        const finEditButton = document.createElement("button");
+        finEditButton.className = "btn btn-dark ms-2 btn-outline-light d-none";
+
+        const finEditButtonIcon = document.createElement("i");
+        finEditButtonIcon.className = "fas fa-edit profile-icon";
+        finEditButton.appendChild(finEditButtonIcon);
+
+        // remove button
+        const removeButton = document.createElement("button");
+        removeButton.className = "btn btn-dark btn-outline-light ms-2";
+
+        const removeButtonIcon = document.createElement("i");
+        removeButtonIcon.className = "fas fa-trash profile-icon";
+        removeButton.appendChild(removeButtonIcon);
+
+        // get post id from data-post-id attribute
+        const postId = post.getAttribute("data-post-id");
+
+        // button functionality
+        handleEditBtn(editButton, finEditButton, postId, api, token);
+        handleFinEditBtn(editButton, finEditButton, postId, api, token);
+        handleRemoveButton(removeButton, postId, post, api, token);
+
+        post.appendChild(editButton);
+        post.appendChild(finEditButton);
+        post.appendChild(removeButton);
+    });
+};
+
+// flips/toggles edit & finish edit button, adds input field
+const handleEditBtn = (editBtn, finEditBtn) => {
+    editBtn.addEventListener("click", (e) => {
         e.preventDefault();
 
-        // get text description from parent's child where
-        // child has img description class
-        const description = button.parentElement.querySelector(
+        // swap buttons
+        editBtn.classList.add("d-none");
+        finEditBtn.classList.remove("d-none");
+
+        const description = editBtn.parentElement.querySelector(
             ".profile-img-description"
         );
 
+        // create editing field
         const editField = document.createElement("input");
-        editField.className = "form-control me-2";
+        editField.className =
+            "form-control form-control-sm me-2 edit-field profile-img-description";
         editField.type = "input";
-        editField.placeholder = "Search User (case-sensitive)";
-        editField.classList.remove("d-none");
+        editField.placeholder = "Post Description";
+        editField.value = description.innerText;
 
-        // insert edit field above edit button
+        // show editfield, hide description, insert edit field before edit button
+        editField.classList.remove("d-none");
         description.classList.add("d-none");
-        button.parentElement.insertBefore(editField, button);
+        editBtn.parentElement.insertBefore(editField, editBtn);
+    });
+};
+
+// flips/toggles edit & finish edit button, sends put request to edit post
+const handleFinEditBtn = (editBtn, finEditBtn, postId, api, token) => {
+    finEditBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        // swap buttons
+        finEditBtn.classList.add("d-none");
+        editBtn.classList.remove("d-none");
+
+        // get description, editfield, image src
+        const description = editBtn.parentElement.querySelector(
+            ".profile-img-description"
+        );
+        const editField = finEditBtn.parentElement.querySelector(".edit-field");
+        const imgSrc = finEditBtn.parentElement.querySelector(".post-img").src;
+
+        // if edit field is empty just return
+        if (editField.value.length === 0) {
+            createAlert("Post description cannot be empty", "danger");
+            return;
+        }
+        description.innerText = editField.value;
+
+        finEditBtn.parentElement.removeChild(editField);
+        description.classList.remove("d-none");
+
+        // body for post request
+        // for imgSrc, remove first part of base64
+        const body = {
+            description_text: editField.value,
+            src: imgSrc.split(",")[1],
+        };
+
+        // send put request to edit the post
+        api.putAPIRequestTokenBody("post", { id: postId }, body, token)
+            .then((data) => {
+                if (data.status === 400) {
+                    createAlert("Malformed Request", "danger");
+                } else if (data.status === 403) {
+                    createAlert(
+                        "Invalid Auth Token / Unauthorized to edit post",
+                        "danger"
+                    );
+                } else if (data.status === 404) {
+                    createAlert("Post Not Found", "danger");
+                } else if (data.status === 200) {
+                    data.json().then(() => {
+                        createAlert(
+                            "Successfully updated post description",
+                            "success"
+                        );
+                    });
+                }
+            })
+            .catch((error) => {
+                createAlert("Error editing post", "danger");
+                console.log(error);
+            });
     });
 };
