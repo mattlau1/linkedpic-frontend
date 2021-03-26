@@ -61,12 +61,12 @@ export const handleSettings = () => {
                             "Error Updating Account Information",
                             "danger"
                         );
-                        console.log(error);
+                        console.warn(error);
                     });
             });
         })
         .catch((error) => {
             createAlert("Error Retrieving User Information", "danger");
-            console.log(error);
+            console.warn(error);
         });
 };

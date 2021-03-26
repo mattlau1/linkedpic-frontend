@@ -180,7 +180,7 @@ export const handleProfile = () => {
         })
         .catch((error) => {
             createAlert("Error Loading Profile", "danger");
-            console.log(error);
+            console.warn(error);
         });
 };
 
@@ -223,7 +223,7 @@ const addProfileImages = (postIds, token) => {
             })
             .catch((error) => {
                 createAlert("Error displaying posts", "danger");
-                console.log(error);
+                console.warn(error);
             });
     });
 };
@@ -264,7 +264,7 @@ const setFollowingModal = (userIds, token) => {
             })
             .catch((error) => {
                 createAlert("Error displaying following", "danger");
-                console.log(error);
+                console.warn(error);
             });
     });
 
@@ -337,14 +337,14 @@ const handleProfileBtns = (followBtn, unfollowBtn, token) => {
                                 "Error getting logged in user info",
                                 "danger"
                             );
-                            console.log(error);
+                            console.warn(error);
                         });
                 });
             }
         })
         .catch((error) => {
             createAlert("Error getting profile user info", "danger");
-            console.log(error);
+            console.warn(error);
         });
 };
 
@@ -372,7 +372,7 @@ const handleFollowButton = (followBtn, unfollowBtn, username, token) => {
             })
             .catch((error) => {
                 createAlert(`Error Following ${username}`, "danger");
-                console.log(error);
+                console.warn(error);
             });
     });
 };
@@ -407,7 +407,7 @@ const handleUnfollowButton = (followBtn, unfollowBtn, username, token) => {
             })
             .catch((error) => {
                 createAlert(`Error Following ${username}`, "danger");
-                console.log(error);
+                console.warn(error);
             });
     });
 };
@@ -437,7 +437,7 @@ const handleRemoveButton = (button, postId, post, token) => {
             })
             .catch((error) => {
                 createAlert("Error Removing Post", "danger");
-                console.log(error);
+                console.warn(error);
             });
     });
 };
@@ -573,7 +573,7 @@ const handleFinEditBtn = (editBtn, finEditBtn, postId, token) => {
             })
             .catch((error) => {
                 createAlert("Error editing post", "danger");
-                console.log(error);
+                console.warn(error);
             });
     });
 };

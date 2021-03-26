@@ -31,6 +31,6 @@ export const handleNavbar = () => {
         })
         .catch((error) => {
             createAlert("Error Retrieving User Profile", "danger");
-            console.log(error);
+            console.warn(error);
         });
 };

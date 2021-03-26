@@ -32,7 +32,7 @@ export const handleLogin = () => {
             })
             .catch((error) => {
                 createAlert(`${error}\nIs the backend running?`, "danger");
-                console.log(error);
+                console.warn(error);
             });
     });
 };

@@ -76,7 +76,6 @@ export default class API {
         })
             .then((response) => response.json())
             .then((responseData) => {
-                console.log(responseData);
                 return responseData;
             })
             .catch((error) => console.warn(error));

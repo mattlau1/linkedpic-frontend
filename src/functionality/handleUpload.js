@@ -69,7 +69,7 @@ export const handleUpload = () => {
                 })
                 .catch((error) => {
                     createAlert("Error uploading image", "danger");
-                    console.log(error);
+                    console.warn(error);
                 });
         };
     });

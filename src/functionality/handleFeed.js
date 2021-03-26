@@ -260,7 +260,7 @@ export const loadFeed = (start, fetchLimit, token) => {
         })
         .catch((error) => {
             createAlert("Error retrieving feed", "danger");
-            console.log(error);
+            console.warn(error);
         });
 };
 
@@ -306,7 +306,7 @@ const setLikeModal = (userIds, token, postId) => {
             })
             .catch((error) => {
                 createAlert("Error displaying likes", "danger");
-                console.log(error);
+                console.warn(error);
             });
 
         body.appendChild(likesDiv);
@@ -369,7 +369,7 @@ const handleLikeBtn = (postId, token) => {
         })
         .catch((error) => {
             createAlert("Error liking post", "danger");
-            console.log(error);
+            console.warn(error);
         });
 };
 
@@ -520,7 +520,7 @@ const handleCommentButton = (container, postId, token) => {
             })
             .catch((error) => {
                 createAlert("Error posting comment", "danger");
-                console.log(error);
+                console.warn(error);
             });
     });
 };
