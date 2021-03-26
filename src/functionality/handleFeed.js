@@ -4,7 +4,7 @@ import { getCurrentUsername } from "../helpers.js";
 
 // load and handle feed page functionality
 export const handleFeed = (api) => {
-    // get token from localstorage
+    // get token from localstorage and
     // initialise window global variables
     const token = localStorage.getItem("token");
     window.api = api;
@@ -14,6 +14,7 @@ export const handleFeed = (api) => {
     window.postComments = [];
     window.userId = -1;
 
+    // get user id of logged in user
     api.getAPIRequestTokenQuery("user", {}, token)
         .then((data) => {
             if (data.status === 400) {
@@ -507,6 +508,8 @@ const handleCommentButton = (container, postId, api, token) => {
                             };
 
                             postObj.postComments.push(commentObj);
+
+                            // update comment modal
                             setCommentModal(
                                 postObj.postComments,
                                 postId,

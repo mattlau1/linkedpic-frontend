@@ -24,7 +24,6 @@ export const handleProfile = (api) => {
                 createAlert("User Not Found", "danger");
             } else if (data.status === 200) {
                 data.json().then((result) => {
-                    console.log(result);
                     // username of profile
                     const usernameText = document.createElement("div");
                     usernameText.className = "display-1 text-center";

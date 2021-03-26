@@ -26,7 +26,6 @@ export const handleLogin = (api) => {
                     data.json().then((result) => {
                         createAlert("Login Successful", "success");
                         window.location.hash = `#/feed`;
-                        console.log(result);
                         localStorage.setItem("token", result.token);
                     });
                 }

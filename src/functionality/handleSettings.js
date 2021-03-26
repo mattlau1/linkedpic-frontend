@@ -23,7 +23,6 @@ export const handleSettings = (api) => {
                 createAlert("User Not Found", "danger");
             } else if (data.status === 200) {
                 data.json().then((result) => {
-                    console.log(result);
                     email.value = result.email;
                     name.value = result.name;
 

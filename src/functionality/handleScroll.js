@@ -1,5 +1,7 @@
-// handles scroll event for infinite scroll (for feed only)
 import { loadFeed } from "./handleFeed.js";
+import { createAlert } from "./createAlert.js";
+
+// handles scroll event for infinite scroll (for feed only)
 export const handleScroll = () => {
     const feed = document.getElementById("feed");
     const body = document.querySelector("body");
@@ -10,7 +12,7 @@ export const handleScroll = () => {
     // and then load the feed
     if (body.scrollTop + body.clientHeight >= feed.scrollHeight - 5) {
         body.removeEventListener("scroll", handleScroll);
-        console.log("boop");
+        createAlert("Loading more posts...", "info");
         loadFeed(window.start, window.feedFetchLimit, window.api, token);
     }
 };

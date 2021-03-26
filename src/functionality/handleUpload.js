@@ -5,15 +5,13 @@ export const handleUpload = (api) => {
     const fileInput = document.getElementById("file-input");
     const token = localStorage.getItem("token");
     const body = document.querySelector("body");
+    const imgPreview = document.getElementById("img-preview");
     body.removeEventListener("scroll", handleScroll);
 
-    // if an image is uploaded to the page, preview image
+    // if an image is uploaded to the page, preview the image
     fileInput.addEventListener("change", () => {
-        const imgPreview = document.getElementById("img-preview");
         const img = fileInput.files[0];
         const imgReader = new FileReader();
-
-        console.log(img);
 
         imgReader.onloadend = () => {
             imgPreview.src = imgReader.result;
@@ -62,10 +60,14 @@ export const handleUpload = (api) => {
                         createAlert("Invalid Auth Token", "danger");
                     } else if (data.status === 200) {
                         createAlert("Post successfully created", "success");
+
+                        // reset upload form
+                        document.getElementById("upload-form").reset();
+                        imgPreview.src = "";
                     }
                 })
                 .catch((error) => {
-                    createAlert(`Error uploading image`, "danger");
+                    createAlert("Error uploading image", "danger");
                     console.log(error);
                 });
         };

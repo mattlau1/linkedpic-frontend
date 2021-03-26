@@ -80,6 +80,7 @@ const Upload = {
 
         // form
         const form = document.createElement("form");
+        form.id = "upload-form";
         form.appendChild(descriptionContainer);
         form.appendChild(fileContainer);
         form.appendChild(previewContainer);
