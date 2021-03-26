@@ -61,9 +61,7 @@ export const handleUpload = (api) => {
                     } else if (data.status === 403) {
                         createAlert("Invalid Auth Token", "danger");
                     } else if (data.status === 200) {
-                        data.json().then(() => {
-                            createAlert("Post successfully created", "success");
-                        });
+                        createAlert("Post successfully created", "success");
                     }
                 })
                 .catch((error) => {

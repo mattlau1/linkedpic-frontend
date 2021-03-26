@@ -9,6 +9,27 @@ export const handleFeed = (api) => {
     window.api = api;
     window.start = 0;
     window.feedFetchLimit = 4;
+    window.postInfo = [];
+    window.userId = -1;
+
+    api.getAPIRequestTokenQuery("user", {}, token)
+        .then((data) => {
+            if (data.status === 400) {
+                createAlert("Malformed Request", "danger");
+            } else if (data.status === 403) {
+                createAlert("Invalid Auth Token", "danger");
+            } else if (data.status === 404) {
+                createAlert("User Not Found", "danger");
+            } else if (data.status === 200) {
+                data.json().then((result) => {
+                    window.userId = result.id;
+                });
+            }
+        })
+        .catch((error) => {
+            createAlert("Error Retrieving Logged In User Id", "danger");
+            console.log(error);
+        });
 
     // load initial posts
     loadFeed(window.start, window.feedFetchLimit, window.api, token);
@@ -124,7 +145,7 @@ export const loadFeed = (start, fetchLimit, api, token) => {
                             post.comments.length === 1 ? "Comment" : "Comments"
                         }`;
 
-                        // likes button
+                        // post likes button
                         const likeIcon = document.createElement("i");
                         likeIcon.classList.add("fas", "fa-heart");
                         const likeButton = document.createElement("button");
@@ -136,8 +157,30 @@ export const loadFeed = (start, fetchLimit, api, token) => {
                         );
                         likeButton.setAttribute("data-bs-toggle", "modal");
                         likeButton.setAttribute("data-bs-target", "#modal");
+                        likeButton.setAttribute("data-post-id", post.id);
                         likeButton.addEventListener("click", () => {
-                            setLikeModal(post.meta.likes, api, token, post.id);
+                            // object of post information
+                            const postInfo = {
+                                postId: post.id,
+                                postLikes: post.meta.likes,
+                            };
+
+                            // check if post information exists already
+                            const found = window.postInfo.some(
+                                (postObj) => postObj.postId === post.id
+                            );
+
+                            if (!found) {
+                                console.log("postinfo found");
+                                window.postInfo.push(postInfo);
+                            }
+
+                            setLikeModal(
+                                postInfo.postLikes,
+                                api,
+                                token,
+                                post.id
+                            );
                         });
 
                         // comments button
@@ -292,10 +335,33 @@ const handleLikeBtn = (postId, api, token) => {
             } else if (data.status === 404) {
                 createAlert("Post Not Found", "danger");
             } else if (data.status === 200) {
-                data.json().then((result) => {
-                    console.log(result);
-                    createAlert("Successfully liked the post", "success");
+                console.log("postinfo", window.postInfo);
+
+                // go through post info and look for this post,
+                // if user is not in the post's likes array
+                // add user to the likes array and refresh modal
+                window.postInfo.forEach((postObj) => {
+                    if (
+                        postObj.postId === postId &&
+                        !postObj.postLikes.includes(window.userId)
+                    ) {
+                        postObj.postLikes.push(window.userId);
+                        setLikeModal(postObj.postLikes, api, token, postId);
+
+                        const postLikeBtnText = document
+                            .querySelector(`button[data-post-id="${postId}"]`)
+                            .querySelector("span");
+
+                        const newLikes =
+                            parseInt(postLikeBtnText.innerText.split(" ")[0]) +
+                            1;
+                        postLikeBtnText.innerText = `${newLikes} ${
+                            newLikes === 1 ? "Like" : "Likes"
+                        }`;
+                    }
                 });
+
+                createAlert("Successfully liked the post", "success");
             }
         })
         .catch((error) => {
@@ -416,9 +482,7 @@ const handleCommentButton = (container, postId, api, token) => {
                 } else if (data.status === 404) {
                     createAlert("Post Not Found", "danger");
                 } else if (data.status === 200) {
-                    data.json().then(() => {
-                        createAlert("Successfully posted comment", "success");
-                    });
+                    createAlert("Successfully posted comment", "success");
                 }
             })
             .catch((error) => {

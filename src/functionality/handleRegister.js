@@ -49,9 +49,7 @@ export const handleRegister = (api) => {
                     createAlert("Username has already been taken", "danger");
                 } else if (data.status === 200) {
                     // successful register - send to login page
-                    data.json().then((result) => {
-                        window.location.hash = "#/login";
-                    });
+                    window.location.hash = "#/login";
                 }
             })
             .catch((error) => {

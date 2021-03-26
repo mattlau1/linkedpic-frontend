@@ -374,12 +374,7 @@ const handleFollowButton = (followBtn, unfollowBtn, username, api, token) => {
                 } else if (data.status === 404) {
                     createAlert(`User Not Found`, "danger");
                 } else if (data.status === 200) {
-                    data.json().then(() => {
-                        createAlert(
-                            `You are now following ${username}`,
-                            "success"
-                        );
-                    });
+                    createAlert(`You are now following ${username}`, "success");
                 }
             })
             .catch((error) => {
@@ -410,12 +405,10 @@ const handleUnfollowButton = (followBtn, unfollowBtn, username, api, token) => {
                 } else if (data.status === 404) {
                     createAlert(`User Not Found`, "danger");
                 } else if (data.status === 200) {
-                    data.json().then(() => {
-                        createAlert(
-                            `You have now unfollowed ${username}`,
-                            "success"
-                        );
-                    });
+                    createAlert(
+                        `You have now unfollowed ${username}`,
+                        "success"
+                    );
                 }
             })
             .catch((error) => {
@@ -444,9 +437,7 @@ const handleRemoveButton = (button, postId, post, api, token) => {
                 } else if (data.status === 404) {
                     createAlert("Post Not Found", "danger");
                 } else if (data.status === 200) {
-                    data.json().then(() => {
-                        createAlert("Successfully removed post", "success");
-                    });
+                    createAlert("Successfully removed post", "success");
                 }
             })
             .catch((error) => {
@@ -578,12 +569,10 @@ const handleFinEditBtn = (editBtn, finEditBtn, postId, api, token) => {
                 } else if (data.status === 404) {
                     createAlert("Post Not Found", "danger");
                 } else if (data.status === 200) {
-                    data.json().then(() => {
-                        createAlert(
-                            "Successfully updated post description",
-                            "success"
-                        );
-                    });
+                    createAlert(
+                        "Successfully updated post description",
+                        "success"
+                    );
                 }
             })
             .catch((error) => {

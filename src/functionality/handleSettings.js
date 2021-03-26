@@ -61,12 +61,10 @@ export const handleSettings = (api) => {
                                 } else if (data.status === 404) {
                                     createAlert("User Not Found", "danger");
                                 } else if (data.status === 200) {
-                                    data.json().then(() => {
-                                        createAlert(
-                                            "Successfully updated account information",
-                                            "success"
-                                        );
-                                    });
+                                    createAlert(
+                                        "Successfully updated account information",
+                                        "success"
+                                    );
                                 }
                             })
                             .catch((error) => {
