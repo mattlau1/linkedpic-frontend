@@ -3,11 +3,10 @@ import { handleScroll } from "./handleScroll.js";
 import { getCurrentUsername } from "../helpers.js";
 
 // load and handle feed page functionality
-export const handleFeed = (api) => {
+export const handleFeed = () => {
     // get token from localstorage and
     // initialise window global variables
     const token = localStorage.getItem("token");
-    window.api = api;
     window.start = 0;
     window.feedFetchLimit = 4;
     window.postLikes = [];
@@ -15,35 +14,25 @@ export const handleFeed = (api) => {
     window.userId = -1;
 
     // get user id of logged in user
-    api.getAPIRequestTokenQuery("user", {}, token)
-        .then((data) => {
-            if (data.status === 400) {
-                createAlert("Malformed Request", "danger");
-            } else if (data.status === 403) {
-                createAlert("Invalid Auth Token", "danger");
-            } else if (data.status === 404) {
-                createAlert("User Not Found", "danger");
-            } else if (data.status === 200) {
-                data.json().then((result) => {
-                    window.userId = result.id;
-                });
-            }
-        })
-        .catch((error) => {
-            createAlert("Error Retrieving Logged In User Id", "danger");
-            console.log(error);
-        });
+    window.api.getAPIUserData(token).then((user) => {
+        window.userId = user.id;
+    });
 
     // load initial posts
-    loadFeed(window.start, window.feedFetchLimit, window.api, token);
+    loadFeed(window.start, window.feedFetchLimit, token);
 };
 
 // fetches fetchLimit amount of feeds from index start via GET request
 // and appends this information to the DOM
-export const loadFeed = (start, fetchLimit, api, token) => {
+export const loadFeed = (start, fetchLimit, token) => {
     const feed = document.getElementById("feed");
     const body = document.querySelector("body");
-    api.getAPIRequestTokenQuery("user/feed", { p: start, n: fetchLimit }, token)
+    window.api
+        .getAPIRequestTokenQuery(
+            "user/feed",
+            { p: start, n: fetchLimit },
+            token
+        )
         .then((data) => {
             if (data.status === 403 || data.status === 400) {
                 createAlert(
@@ -177,12 +166,7 @@ export const loadFeed = (start, fetchLimit, api, token) => {
                                 window.postLikes.push(postInfo);
                             }
 
-                            setLikeModal(
-                                postInfo.postLikes,
-                                api,
-                                token,
-                                post.id
-                            );
+                            setLikeModal(postInfo.postLikes, token, post.id);
                         });
 
                         // comments button
@@ -218,7 +202,6 @@ export const loadFeed = (start, fetchLimit, api, token) => {
                             setCommentModal(
                                 postInfo.postComments,
                                 post.id,
-                                api,
                                 token
                             );
                         });
@@ -284,7 +267,7 @@ export const loadFeed = (start, fetchLimit, api, token) => {
 };
 
 // sets like information on modal for the given post
-const setLikeModal = (userIds, api, token, postId) => {
+const setLikeModal = (userIds, token, postId) => {
     const header = document.getElementById("main-modal");
     const body = document.getElementById("modal-text");
     const likeBtn = document.getElementById("like-post-btn");
@@ -307,7 +290,8 @@ const setLikeModal = (userIds, api, token, postId) => {
         const query = { id: userId };
 
         // get username from user id and add username to likes div
-        api.getAPIRequestTokenQuery("user", query, token)
+        window.api
+            .getAPIRequestTokenQuery("user", query, token)
             .then((data) => {
                 if (data.status === 400) {
                     createAlert("Malformed Request", "danger");
@@ -336,7 +320,7 @@ const setLikeModal = (userIds, api, token, postId) => {
 
     // like button functionality
     document.getElementById("like-post-btn").addEventListener("click", () => {
-        handleLikeBtn(postId, api, token);
+        handleLikeBtn(postId, token);
     });
 
     // show like button
@@ -347,8 +331,9 @@ const setLikeModal = (userIds, api, token, postId) => {
 };
 
 // likes a post with postId given a user token
-const handleLikeBtn = (postId, api, token) => {
-    api.putAPIRequestTokenQuery("post/like", { id: postId }, token)
+const handleLikeBtn = (postId, token) => {
+    window.api
+        .putAPIRequestTokenQuery("post/like", { id: postId }, token)
         .then((data) => {
             if (data.status === 400) {
                 createAlert("Malformed Request", "danger");
@@ -366,7 +351,7 @@ const handleLikeBtn = (postId, api, token) => {
                         !postObj.postLikes.includes(window.userId)
                     ) {
                         postObj.postLikes.push(window.userId);
-                        setLikeModal(postObj.postLikes, api, token, postId);
+                        setLikeModal(postObj.postLikes, token, postId);
 
                         const postLikeBtnText = document
                             .querySelector(`button[data-likes-id="${postId}"]`)
@@ -391,7 +376,7 @@ const handleLikeBtn = (postId, api, token) => {
 };
 
 // sets information relating to post comments into modal
-const setCommentModal = (comments, postId, api, token) => {
+const setCommentModal = (comments, postId, token) => {
     const header = document.getElementById("main-modal");
     const body = document.getElementById("modal-text");
     const likeBtn = document.getElementById("like-post-btn");
@@ -409,7 +394,7 @@ const setCommentModal = (comments, postId, api, token) => {
         body.innerText = "";
     }
 
-    handleCommentButton(commentInput, postId, api, token);
+    handleCommentButton(commentInput, postId, token);
 
     // go through each comment
     let commentCounter = 1;
@@ -457,7 +442,7 @@ const setCommentModal = (comments, postId, api, token) => {
 
 // handles click of send comment button
 // gets comment from input field, sends put request to server
-const handleCommentButton = (container, postId, api, token) => {
+const handleCommentButton = (container, postId, token) => {
     const button = container
         .querySelector(".input-group-btn")
         .querySelector(".comment-input-button");
@@ -483,12 +468,13 @@ const handleCommentButton = (container, postId, api, token) => {
         // reset comment text value after submitting
         commentText.value = "";
 
-        api.putAPIRequestTokenBodyQuery(
-            "post/comment",
-            { id: postId },
-            body,
-            token
-        )
+        window.api
+            .putAPIRequestTokenBodyQuery(
+                "post/comment",
+                { id: postId },
+                body,
+                token
+            )
             .then((data) => {
                 if (data.status === 400) {
                     createAlert("Malformed Request", "danger");
@@ -513,7 +499,6 @@ const handleCommentButton = (container, postId, api, token) => {
                             setCommentModal(
                                 postObj.postComments,
                                 postId,
-                                api,
                                 token
                             );
 

@@ -65,19 +65,24 @@ export default class API {
         });
     }
 
-    getAPIRequestTokenQueryTimeout(path, query, token, timeoutMs) {
-        const controller = new AbortController();
-        // 5 second timeout:
-        setTimeout(() => controller.abort(), timeoutMs);
-        return fetch(`${this.url}/${path}/?` + new URLSearchParams(query), {
-            signal: controller.signal,
+    /** @param {String} path */
+    /** @param {Object} query */
+    /** @param {String} token */
+    getAPIUserData(token) {
+        return fetch(`${this.url}/user/`, {
             method: "GET",
             headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
                 Authorization: `Token ${token}`,
             },
-        });
+        })
+            .then((response) => response.json())
+            .then((responseData) => {
+                console.log(responseData);
+                return responseData;
+            })
+            .catch((error) => console.warn(error));
     }
 
     /** @param {String} path */
