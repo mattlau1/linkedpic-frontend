@@ -1,5 +1,6 @@
 import { createAlert } from "./createAlert.js";
 import { handleScroll } from "./handleScroll.js";
+import { getCurrentUsername } from "../helpers.js";
 
 // load and handle feed page functionality
 export const handleFeed = (api) => {
@@ -9,7 +10,8 @@ export const handleFeed = (api) => {
     window.api = api;
     window.start = 0;
     window.feedFetchLimit = 4;
-    window.postInfo = [];
+    window.postLikes = [];
+    window.postComments = [];
     window.userId = -1;
 
     api.getAPIRequestTokenQuery("user", {}, token)
@@ -49,7 +51,6 @@ export const loadFeed = (start, fetchLimit, api, token) => {
                 );
             } else if (data.status === 200) {
                 data.json().then((result) => {
-                    console.log(result);
                     result.posts.map((post) => {
                         // author information section
                         const postContainer = document.createElement("div");
@@ -157,7 +158,7 @@ export const loadFeed = (start, fetchLimit, api, token) => {
                         );
                         likeButton.setAttribute("data-bs-toggle", "modal");
                         likeButton.setAttribute("data-bs-target", "#modal");
-                        likeButton.setAttribute("data-post-id", post.id);
+                        likeButton.setAttribute("data-likes-id", post.id);
                         likeButton.addEventListener("click", () => {
                             // object of post information
                             const postInfo = {
@@ -166,13 +167,13 @@ export const loadFeed = (start, fetchLimit, api, token) => {
                             };
 
                             // check if post information exists already
-                            const found = window.postInfo.some(
+                            const found = window.postLikes.some(
                                 (postObj) => postObj.postId === post.id
                             );
 
+                            // if post is not found
                             if (!found) {
-                                console.log("postinfo found");
-                                window.postInfo.push(postInfo);
+                                window.postLikes.push(postInfo);
                             }
 
                             setLikeModal(
@@ -195,8 +196,30 @@ export const loadFeed = (start, fetchLimit, api, token) => {
 
                         commentButton.setAttribute("data-bs-toggle", "modal");
                         commentButton.setAttribute("data-bs-target", "#modal");
+                        commentButton.setAttribute("data-comment-id", post.id);
                         commentButton.addEventListener("click", () => {
-                            setCommentModal(post.comments, post.id, api, token);
+                            // object of post information
+                            const postInfo = {
+                                postId: post.id,
+                                postComments: post.comments,
+                            };
+
+                            // check if post information exists already
+                            const found = window.postComments.some(
+                                (postObj) => postObj.postId === post.id
+                            );
+
+                            // if post is not found
+                            if (!found) {
+                                window.postComments.push(postInfo);
+                            }
+
+                            setCommentModal(
+                                postInfo.postComments,
+                                post.id,
+                                api,
+                                token
+                            );
                         });
 
                         // post description area
@@ -273,7 +296,6 @@ const setLikeModal = (userIds, api, token, postId) => {
 
     // clear body of modal
     body.innerText = "";
-    console.log(userIds);
     if (userIds.length === 0) {
         body.innerText = "Nobody has liked this post :(";
     }
@@ -295,7 +317,6 @@ const setLikeModal = (userIds, api, token, postId) => {
                 } else if (data.status === 200) {
                     data.json().then((result) => {
                         // add username to likes div
-                        console.log(result);
                         likesDiv.innerText += result.username;
                     });
                 }
@@ -335,12 +356,10 @@ const handleLikeBtn = (postId, api, token) => {
             } else if (data.status === 404) {
                 createAlert("Post Not Found", "danger");
             } else if (data.status === 200) {
-                console.log("postinfo", window.postInfo);
-
                 // go through post info and look for this post,
                 // if user is not in the post's likes array
                 // add user to the likes array and refresh modal
-                window.postInfo.forEach((postObj) => {
+                window.postLikes.forEach((postObj) => {
                     if (
                         postObj.postId === postId &&
                         !postObj.postLikes.includes(window.userId)
@@ -349,7 +368,7 @@ const handleLikeBtn = (postId, api, token) => {
                         setLikeModal(postObj.postLikes, api, token, postId);
 
                         const postLikeBtnText = document
-                            .querySelector(`button[data-post-id="${postId}"]`)
+                            .querySelector(`button[data-likes-id="${postId}"]`)
                             .querySelector("span");
 
                         const newLikes =
@@ -399,7 +418,7 @@ const setCommentModal = (comments, postId, api, token) => {
 
         // set comment author
         const commentAuthor = document.createElement("div");
-        commentAuthor.classList.add("col-md-8", "fw-bold", "commentcontent");
+        commentAuthor.classList.add("col-md-8", "fw-bold", "comment-content");
         commentAuthor.innerText = comment.author;
 
         // set comment date
@@ -412,7 +431,7 @@ const setCommentModal = (comments, postId, api, token) => {
 
         // set comment content
         const commentContent = document.createElement("div");
-        commentContent.classList.add("col-md-12", "commentcontent");
+        commentContent.classList.add("col-md-12", "comment-content");
         commentContent.innerText = comment.comment;
 
         // horizontal rule
@@ -427,14 +446,9 @@ const setCommentModal = (comments, postId, api, token) => {
         // append hr if not last comment
         if (commentCounter < comments.length) {
             body.appendChild(hr);
-            console.log(commentCounter);
         }
-
-        console.log(comment.author);
-
         commentCounter++;
     });
-    console.log(comments);
 
     // change header
     header.innerText = "Comments";
@@ -482,7 +496,40 @@ const handleCommentButton = (container, postId, api, token) => {
                 } else if (data.status === 404) {
                     createAlert("Post Not Found", "danger");
                 } else if (data.status === 200) {
-                    createAlert("Successfully posted comment", "success");
+                    // go through post info and look for this post,
+                    // add user to the likes array and refresh modal
+                    window.postComments.forEach((postObj) => {
+                        if (postObj.postId === postId) {
+                            const commentObj = {
+                                author: getCurrentUsername(),
+                                published: Date.now() / 1000,
+                                comment: body.comment,
+                            };
+
+                            postObj.postComments.push(commentObj);
+                            setCommentModal(
+                                postObj.postComments,
+                                postId,
+                                api,
+                                token
+                            );
+
+                            const postCommentBtnText = document
+                                .querySelector(
+                                    `button[data-comment-id="${postId}"]`
+                                )
+                                .querySelector("span");
+
+                            const newCommentsNumber =
+                                parseInt(
+                                    postCommentBtnText.innerText.split(" ")[0]
+                                ) + 1;
+                            postCommentBtnText.innerText = `${newCommentsNumber} ${
+                                newCommentsNumber === 1 ? "Comment" : "Comments"
+                            }`;
+                        }
+                        createAlert("Successfully posted comment", "success");
+                    });
                 }
             })
             .catch((error) => {
