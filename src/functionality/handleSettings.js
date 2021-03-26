@@ -1,4 +1,5 @@
 import { createAlert } from "./createAlert.js";
+import { handleScroll } from "./handleScroll.js";
 
 // load and handle settings page functionality
 export const handleSettings = (api) => {
@@ -7,6 +8,8 @@ export const handleSettings = (api) => {
     const newPassword1 = document.getElementById("account-first-pass");
     const newPassword2 = document.getElementById("account-second-pass");
     const updateBtn = document.getElementById("update-button");
+    const body = document.querySelector("body");
+    body.removeEventListener("scroll", handleScroll);
 
     // get logged in user information
     const token = localStorage.getItem("token");

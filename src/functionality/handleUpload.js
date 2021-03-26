@@ -1,9 +1,11 @@
 import { createAlert } from "./createAlert.js";
-
+import { handleScroll } from "./handleScroll.js";
 // load and handle upload page functionality
 export const handleUpload = (api) => {
     const fileInput = document.getElementById("file-input");
     const token = localStorage.getItem("token");
+    const body = document.querySelector("body");
+    body.removeEventListener("scroll", handleScroll);
 
     // if an image is uploaded to the page, preview image
     fileInput.addEventListener("change", () => {

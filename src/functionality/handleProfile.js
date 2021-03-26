@@ -1,9 +1,12 @@
 import { createAlert } from "./createAlert.js";
+import { handleScroll } from "./handleScroll.js";
 
 // load and handle profile page functionality
 export const handleProfile = (api) => {
     const token = localStorage.getItem("token");
     const currPath = window.location.hash;
+    const body = document.querySelector("body");
+    body.removeEventListener("scroll", handleScroll);
 
     // get current profile username from url
     const user = currPath.substring(currPath.lastIndexOf("/") + 1);

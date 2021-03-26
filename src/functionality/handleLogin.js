@@ -1,7 +1,10 @@
 import { createAlert } from "./createAlert.js";
+import { handleScroll } from "./handleScroll.js";
 
 // load and handle login page functionality
 export const handleLogin = (api) => {
+    const body = document.querySelector("body");
+    body.removeEventListener("scroll", handleScroll);
     document.getElementById("loginbtn").addEventListener("click", (e) => {
         e.preventDefault();
         const username = document.getElementById("usernameinput").value;

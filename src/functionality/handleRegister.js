@@ -1,7 +1,10 @@
 import { createAlert } from "./createAlert.js";
+import { handleScroll } from "./handleScroll.js";
 
 // load and handle registration page functionality
 export const handleRegister = (api) => {
+    const body = document.querySelector("body");
+    body.removeEventListener("scroll", handleScroll);
     document.getElementById("registerbtn").addEventListener("click", (e) => {
         e.preventDefault();
         const firstName = document.getElementById("firstnameinput").value;
