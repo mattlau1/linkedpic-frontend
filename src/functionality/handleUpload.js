@@ -1,7 +1,8 @@
-import { createAlert } from "./createAlert.js";
+import { createAlert } from "../helpers.js";
 import { handleScroll } from "./handleScroll.js";
+
 // load and handle upload page functionality
-export const handleUpload = (api) => {
+export const handleUpload = () => {
     const fileInput = document.getElementById("file-input");
     const token = localStorage.getItem("token");
     const body = document.querySelector("body");
@@ -49,7 +50,8 @@ export const handleUpload = (api) => {
             };
 
             // send post request to upload image
-            api.postAPIRequest("post", body, token)
+            window.api
+                .postAPIRequest("post", body, token)
                 .then((data) => {
                     if (data.status === 400) {
                         createAlert(

@@ -1,5 +1,5 @@
 import { loadFeed } from "./handleFeed.js";
-import { createAlert } from "./createAlert.js";
+import { createAlert } from "../helpers.js";
 
 // handles scroll event for infinite scroll (for feed only)
 export const handleScroll = () => {

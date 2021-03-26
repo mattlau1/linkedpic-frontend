@@ -1,8 +1,8 @@
-import { createAlert } from "./createAlert.js";
+import { createAlert } from "../helpers.js";
 import { handleScroll } from "./handleScroll.js";
 
 // load and handle login page functionality
-export const handleLogin = (api) => {
+export const handleLogin = () => {
     const body = document.querySelector("body");
     body.removeEventListener("scroll", handleScroll);
     document.getElementById("loginbtn").addEventListener("click", (e) => {
@@ -15,7 +15,8 @@ export const handleLogin = (api) => {
             password: password,
         };
 
-        api.postAPIRequest("auth/login", loginBody)
+        window.api
+            .postAPIRequest("auth/login", loginBody)
             .then((data) => {
                 if (data.status === 400) {
                     createAlert("Missing Username/Password", "danger");

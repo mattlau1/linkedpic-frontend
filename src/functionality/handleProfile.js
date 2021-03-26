@@ -1,4 +1,4 @@
-import { createAlert } from "./createAlert.js";
+import { createAlert } from "../helpers.js";
 import { handleScroll } from "./handleScroll.js";
 
 // load and handle profile page functionality
@@ -294,49 +294,46 @@ const handleProfileBtns = (followBtn, unfollowBtn, api, token) => {
             } else if (data.status === 200) {
                 // then get information for current user (logged in user)
                 data.json().then((profile) => {
-                    api.getAPIRequestTokenQuery("user", {}, token)
-                        .then((data) => {
-                            if (data.status === 200) {
-                                data.json().then((currUser) => {
-                                    const currFollowing = currUser.following;
-                                    const profileId = profile.id;
+                    window.api
+                        .getAPIUserData(token)
+                        .then((user) => {
+                            const currFollowing = user.following;
+                            const profileId = profile.id;
 
-                                    // add functionality to follow/unfollow buttons
-                                    handleUnfollowButton(
-                                        followBtn,
-                                        unfollowBtn,
-                                        username,
-                                        api,
-                                        token
-                                    );
-                                    handleFollowButton(
-                                        followBtn,
-                                        unfollowBtn,
-                                        username,
-                                        api,
-                                        token
-                                    );
+                            // add functionality to follow/unfollow buttons
+                            handleUnfollowButton(
+                                followBtn,
+                                unfollowBtn,
+                                username,
+                                api,
+                                token
+                            );
+                            handleFollowButton(
+                                followBtn,
+                                unfollowBtn,
+                                username,
+                                api,
+                                token
+                            );
 
-                                    // show follow/unfollow button
-                                    // based on if current user is following
-                                    // or not
-                                    if (currFollowing.includes(profileId)) {
-                                        // user is currently following this user
-                                        unfollowBtn.classList.remove("d-none");
-                                    } else {
-                                        // user is not currently following this user
-                                        followBtn.classList.remove("d-none");
-                                    }
+                            // show follow/unfollow button
+                            // based on if current user is following
+                            // or not
+                            if (currFollowing.includes(profileId)) {
+                                // user is currently following this user
+                                unfollowBtn.classList.remove("d-none");
+                            } else {
+                                // user is not currently following this user
+                                followBtn.classList.remove("d-none");
+                            }
 
-                                    // user is on their own profile
-                                    // remove follow/unfollow buttons
-                                    // add edit and remove buttons
-                                    if (currUser.username === username) {
-                                        followBtn.classList.add("d-none");
-                                        unfollowBtn.classList.add("d-none");
-                                        addProfilePostButtons(api, token);
-                                    }
-                                });
+                            // user is on their own profile
+                            // remove follow/unfollow buttons
+                            // add edit and remove buttons
+                            if (user.username === username) {
+                                followBtn.classList.add("d-none");
+                                unfollowBtn.classList.add("d-none");
+                                addProfilePostButtons(api, token);
                             }
                         })
                         .catch((error) => {

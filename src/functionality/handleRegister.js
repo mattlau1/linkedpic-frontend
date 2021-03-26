@@ -1,8 +1,8 @@
-import { createAlert } from "./createAlert.js";
+import { createAlert } from "../helpers.js";
 import { handleScroll } from "./handleScroll.js";
 
 // load and handle registration page functionality
-export const handleRegister = (api) => {
+export const handleRegister = () => {
     const body = document.querySelector("body");
     body.removeEventListener("scroll", handleScroll);
     document.getElementById("registerbtn").addEventListener("click", (e) => {
@@ -41,7 +41,8 @@ export const handleRegister = (api) => {
             name: `${firstName} ${lastName}`,
         };
 
-        api.postAPIRequest("auth/signup", signupBody)
+        window.api
+            .postAPIRequest("auth/signup", signupBody)
             .then((data) => {
                 if (data.status === 400) {
                     createAlert("Missing username or password", "danger");

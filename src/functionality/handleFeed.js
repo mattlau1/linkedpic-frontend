@@ -1,6 +1,5 @@
-import { createAlert } from "./createAlert.js";
 import { handleScroll } from "./handleScroll.js";
-import { getCurrentUsername } from "../helpers.js";
+import { getCurrentUsername, createAlert } from "../helpers.js";
 
 // load and handle feed page functionality
 export const handleFeed = () => {
