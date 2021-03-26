@@ -25,18 +25,20 @@ const api = new API(url);
 const router = () => {
     // Find the component based on the current path
     let path = location.hash.slice(1).toLowerCase() || "/";
-
     const { component } =
         routes.find((r) => r.path.match(new RegExp(`^\\${path}$`, "gmi"))) ||
         undefined ||
         {};
 
+    // get root
     const root = document.getElementById("root");
 
     // clear page by removing all children of root node
     while (root.firstChild) {
         root.firstChild.remove();
     }
+
+    // render alert and modal area and initialise window.api
     root.appendChild(Alert.render());
     root.appendChild(Modal.render());
     window.api = api;

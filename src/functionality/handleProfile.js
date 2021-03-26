@@ -277,13 +277,6 @@ const handleProfileBtns = (followBtn, unfollowBtn, token) => {
     const currPath = window.location.hash;
     const username = currPath.substring(currPath.lastIndexOf("/") + 1);
 
-    // get information of current user and profile they are looking at
-    // if user is following the current user then show unfollow button
-    // else show follow button
-
-    // only show follow/unfollow button
-    // if they are not looking at their own page
-
     // first get information from user profile
     window.api
         .getAPIRequestTokenQuery("user", { username: username }, token)
@@ -300,6 +293,8 @@ const handleProfileBtns = (followBtn, unfollowBtn, token) => {
                     window.api
                         .getAPIUserData(token)
                         .then((user) => {
+                            // if logged in user is following the user then show unfollow button
+                            // else show follow button unless they are looking at their own page
                             const currFollowing = user.following;
                             const profileId = profile.id;
 
