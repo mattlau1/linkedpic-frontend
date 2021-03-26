@@ -46,10 +46,10 @@ export const loadFeed = (start, fetchLimit, token) => {
 
                         // create left and right column gaps
                         const leftColGap = document.createElement("div");
-                        leftColGap.classList.add("col-md-3", "col-xs-1");
+                        leftColGap.classList.add("col-md-2", "col-xs-1");
 
                         const rightColGap = document.createElement("div");
-                        rightColGap.classList.add("col-md-3", "col-xs-1");
+                        rightColGap.classList.add("col-md-2", "col-xs-1");
 
                         const authorInfoArea = document.createElement("div");
                         authorInfoArea.classList.add(
@@ -74,7 +74,7 @@ export const loadFeed = (start, fetchLimit, token) => {
 
                         // author name
                         const authorName = document.createElement("p");
-                        authorName.classList.add("d-inline");
+                        authorName.classList.add("d-inline", "fw-bold");
                         authorName.id = "authorname";
 
                         // post date
@@ -85,20 +85,18 @@ export const loadFeed = (start, fetchLimit, token) => {
 
                         // post image container
                         const imgContainer = document.createElement("div");
-                        imgContainer.classList.add("col-md-6", "p-0");
+                        imgContainer.classList.add("col-md-8", "p-0");
 
                         const postedImg = document.createElement("img");
                         postedImg.classList.add("rounded");
                         postedImg.id = "postimg";
                         postedImg.src = `data:image/jpg;base64,${post.src}`;
 
-                        const likeContainer = document.createElement("div");
-                        likeContainer.classList.add("col-md-3", "col-xs-1");
-                        likeContainer.id = "likeContainer";
+                        const leftColGap2 = document.createElement("div");
+                        leftColGap2.classList.add("col-md-2", "col-xs-1");
 
-                        const commentContainer = document.createElement("div");
-                        commentContainer.classList.add("col-md-3", "col-xs-1");
-                        commentContainer.id = "commentContainer";
+                        const rightColGap2 = document.createElement("div");
+                        rightColGap2.classList.add("col-md-2", "col-xs-1");
 
                         // button area section
                         const buttonArea = document.createElement("div");
@@ -106,10 +104,10 @@ export const loadFeed = (start, fetchLimit, token) => {
                         buttonArea.classList.add("row", "md-12", "p-0");
 
                         const leftColGap3 = document.createElement("div");
-                        leftColGap3.classList.add("col-md-3", "col-xs-1");
+                        leftColGap3.classList.add("col-md-2", "col-xs-1");
 
                         const rightColGap3 = document.createElement("div");
-                        rightColGap3.classList.add("col-md-3", "col-xs-1");
+                        rightColGap3.classList.add("col-md-2", "col-xs-1");
 
                         const buttonContainer = document.createElement("div");
                         buttonContainer.classList.add(
@@ -209,10 +207,10 @@ export const loadFeed = (start, fetchLimit, token) => {
                         descriptionArea.classList.add("row", "md-12");
 
                         const leftColGap4 = document.createElement("div");
-                        leftColGap4.classList.add("col-md-3", "col-xs-1");
+                        leftColGap4.classList.add("col-md-2", "col-xs-1");
 
                         const descriptionDiv = document.createElement("div");
-                        descriptionDiv.classList.add("col-md-6");
+                        descriptionDiv.classList.add("col-md-8");
 
                         const descriptionText = document.createElement("p");
                         descriptionText.classList.add("d-inline");
@@ -242,9 +240,9 @@ export const loadFeed = (start, fetchLimit, token) => {
                         authorInfoArea.appendChild(authorImg);
                         authorInfoArea.appendChild(authorName);
                         postContainer.appendChild(descriptionArea);
-                        postContainer.appendChild(likeContainer);
+                        postContainer.appendChild(leftColGap2);
                         postContainer.appendChild(imgContainer);
-                        postContainer.appendChild(commentContainer);
+                        postContainer.appendChild(rightColGap2);
                         postContainer.appendChild(buttonArea);
                         postContainer.appendChild(hr);
                         feed.appendChild(postContainer);

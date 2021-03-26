@@ -333,17 +333,14 @@ const handleProfileBtns = (followBtn, unfollowBtn, token) => {
                             }
                         })
                         .catch((error) => {
-                            createAlert(
-                                "Error getting logged in user info",
-                                "danger"
-                            );
+                            createAlert("Error getting user info", "danger");
                             console.warn(error);
                         });
                 });
             }
         })
         .catch((error) => {
-            createAlert("Error getting profile user info", "danger");
+            createAlert("Error getting profile info", "danger");
             console.warn(error);
         });
 };
