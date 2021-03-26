@@ -1,8 +1,7 @@
-import { createAlert } from "../helpers.js";
-import { handleScroll } from "./handleScroll.js";
+import { createAlert, handleScroll } from "../helpers.js";
 
 // load and handle profile page functionality
-export const handleProfile = (api) => {
+export const handleProfile = () => {
     const token = localStorage.getItem("token");
     const currPath = window.location.hash;
     const body = document.querySelector("body");
@@ -14,7 +13,8 @@ export const handleProfile = (api) => {
     const profile = document.getElementById("profile");
 
     // get user information
-    api.getAPIRequestTokenQuery("user", { username: user }, token)
+    window.api
+        .getAPIRequestTokenQuery("user", { username: user }, token)
         .then((data) => {
             if (data.status === 400) {
                 createAlert("Malformed Request", "danger");
@@ -80,7 +80,7 @@ export const handleProfile = (api) => {
                         "p2 profile-info text-center fw-bold";
                     followingStat.innerText = `${result.following.length} Following`;
 
-                    setFollowingModal(result.following, api, token);
+                    setFollowingModal(result.following, token);
 
                     followingStatContainer.appendChild(followingStat);
 
@@ -154,7 +154,7 @@ export const handleProfile = (api) => {
                     postContainer.id = "posts";
                     postContainer.className = "row md-12 posts";
 
-                    addProfileImages(result.posts, api, token);
+                    addProfileImages(result.posts, token);
 
                     // page container
                     const pageRowContainer = document.createElement("div");
@@ -174,7 +174,7 @@ export const handleProfile = (api) => {
 
                     profile.appendChild(pageContainer);
 
-                    handleProfileBtns(followBtn, unfollowBtn, api, token);
+                    handleProfileBtns(followBtn, unfollowBtn, token);
                 });
             }
         })
@@ -185,9 +185,10 @@ export const handleProfile = (api) => {
 };
 
 // adds profile images to page, given postids
-const addProfileImages = (postIds, api, token) => {
+const addProfileImages = (postIds, token) => {
     postIds.map((postId) => {
-        api.getAPIRequestTokenQuery("post", { id: postId }, token)
+        window.api
+            .getAPIRequestTokenQuery("post", { id: postId }, token)
             .then((data) => {
                 if (data.status === 400) {
                     createAlert("Malformed Request", "danger");
@@ -228,7 +229,7 @@ const addProfileImages = (postIds, api, token) => {
 };
 
 // sets modal information to list of users that the user is following
-const setFollowingModal = (userIds, api, token) => {
+const setFollowingModal = (userIds, token) => {
     const header = document.getElementById("main-modal");
     const body = document.getElementById("modal-text");
     const likeBtn = document.getElementById("like-post-btn");
@@ -244,7 +245,8 @@ const setFollowingModal = (userIds, api, token) => {
 
     // for each user id, append user id's username to modal body
     userIds.map((user) => {
-        api.getAPIRequestTokenQuery("user", { id: user }, token)
+        window.api
+            .getAPIRequestTokenQuery("user", { id: user }, token)
             .then((data) => {
                 if (data.status === 400) {
                     createAlert("Malformed Request", "danger");
@@ -271,7 +273,7 @@ const setFollowingModal = (userIds, api, token) => {
 };
 
 // handles all the buttons on a user's profile page
-const handleProfileBtns = (followBtn, unfollowBtn, api, token) => {
+const handleProfileBtns = (followBtn, unfollowBtn, token) => {
     const currPath = window.location.hash;
     const username = currPath.substring(currPath.lastIndexOf("/") + 1);
 
@@ -283,7 +285,8 @@ const handleProfileBtns = (followBtn, unfollowBtn, api, token) => {
     // if they are not looking at their own page
 
     // first get information from user profile
-    api.getAPIRequestTokenQuery("user", { username: username }, token)
+    window.api
+        .getAPIRequestTokenQuery("user", { username: username }, token)
         .then((data) => {
             if (data.status === 400) {
                 createAlert("Malformed Request", "danger");
@@ -305,14 +308,12 @@ const handleProfileBtns = (followBtn, unfollowBtn, api, token) => {
                                 followBtn,
                                 unfollowBtn,
                                 username,
-                                api,
                                 token
                             );
                             handleFollowButton(
                                 followBtn,
                                 unfollowBtn,
                                 username,
-                                api,
                                 token
                             );
 
@@ -333,7 +334,7 @@ const handleProfileBtns = (followBtn, unfollowBtn, api, token) => {
                             if (user.username === username) {
                                 followBtn.classList.add("d-none");
                                 unfollowBtn.classList.add("d-none");
-                                addProfilePostButtons(api, token);
+                                addProfilePostButtons(token);
                             }
                         })
                         .catch((error) => {
@@ -353,15 +354,16 @@ const handleProfileBtns = (followBtn, unfollowBtn, api, token) => {
 };
 
 // turns follow button on, turns unfollow button off
-const handleFollowButton = (followBtn, unfollowBtn, username, api, token) => {
+const handleFollowButton = (followBtn, unfollowBtn, username, token) => {
     followBtn.addEventListener("click", () => {
         followBtn.classList.add("d-none");
         unfollowBtn.classList.remove("d-none");
-        api.putAPIRequestTokenQuery(
-            "user/follow",
-            { username: username },
-            token
-        )
+        window.api
+            .putAPIRequestTokenQuery(
+                "user/follow",
+                { username: username },
+                token
+            )
             .then((data) => {
                 if (data.status === 400) {
                     createAlert("You cannot follow yourself", "danger");
@@ -381,18 +383,19 @@ const handleFollowButton = (followBtn, unfollowBtn, username, api, token) => {
 };
 
 // turns unfollow button on, turns follow button off
-const handleUnfollowButton = (followBtn, unfollowBtn, username, api, token) => {
+const handleUnfollowButton = (followBtn, unfollowBtn, username, token) => {
     unfollowBtn.addEventListener("click", () => {
         // flip buttons
         followBtn.classList.remove("d-none");
         unfollowBtn.classList.add("d-none");
 
         // send request to unfollow user
-        api.putAPIRequestTokenQuery(
-            "user/unfollow",
-            { username: username },
-            token
-        )
+        window.api
+            .putAPIRequestTokenQuery(
+                "user/unfollow",
+                { username: username },
+                token
+            )
             .then((data) => {
                 if (data.status === 400) {
                     createAlert("You cannot follow yourself", "danger");
@@ -416,7 +419,7 @@ const handleUnfollowButton = (followBtn, unfollowBtn, username, api, token) => {
 
 // when remove button is clicked, sends delete request to backend
 // to remove post and then removes the post from the DOM
-const handleRemoveButton = (button, postId, post, api, token) => {
+const handleRemoveButton = (button, postId, post, token) => {
     button.addEventListener("click", (e) => {
         e.preventDefault();
 
@@ -424,7 +427,8 @@ const handleRemoveButton = (button, postId, post, api, token) => {
         document.getElementById("posts").removeChild(post);
 
         // send delete request to remove the post
-        api.deleteAPIRequestTokenQuery("post", { id: postId }, token)
+        window.api
+            .deleteAPIRequestTokenQuery("post", { id: postId }, token)
             .then((data) => {
                 if (data.status === 400) {
                     createAlert("Malformed Request", "danger");
@@ -445,7 +449,7 @@ const handleRemoveButton = (button, postId, post, api, token) => {
 
 // adds functionality to edit and remove buttons and adds them to the page
 // remove button removes post from the DOM
-const addProfilePostButtons = (api, token) => {
+const addProfilePostButtons = (token) => {
     const imgContainer = document.querySelectorAll(".profile-img-container");
 
     // show account settings button
@@ -481,9 +485,9 @@ const addProfilePostButtons = (api, token) => {
         const postId = post.getAttribute("data-post-id");
 
         // button functionality
-        handleEditBtn(editButton, finEditButton, postId, api, token);
-        handleFinEditBtn(editButton, finEditButton, postId, api, token);
-        handleRemoveButton(removeButton, postId, post, api, token);
+        handleEditBtn(editButton, finEditButton, postId, token);
+        handleFinEditBtn(editButton, finEditButton, postId, token);
+        handleRemoveButton(removeButton, postId, post, token);
 
         post.appendChild(editButton);
         post.appendChild(finEditButton);
@@ -520,7 +524,7 @@ const handleEditBtn = (editBtn, finEditBtn) => {
 };
 
 // flips/toggles edit & finish edit button, sends put request to edit post
-const handleFinEditBtn = (editBtn, finEditBtn, postId, api, token) => {
+const handleFinEditBtn = (editBtn, finEditBtn, postId, token) => {
     finEditBtn.addEventListener("click", (e) => {
         e.preventDefault();
 
@@ -553,7 +557,8 @@ const handleFinEditBtn = (editBtn, finEditBtn, postId, api, token) => {
         };
 
         // send put request to edit the post
-        api.putAPIRequestTokenBodyQuery("post", { id: postId }, body, token)
+        window.api
+            .putAPIRequestTokenBodyQuery("post", { id: postId }, body, token)
             .then((data) => {
                 if (data.status === 400) {
                     createAlert("Malformed Request", "danger");

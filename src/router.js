@@ -4,8 +4,8 @@ import { handleFeed } from "./functionality/handleFeed.js";
 import { handleProfile } from "./functionality/handleProfile.js";
 import { handleNavbar } from "./functionality/handleNavbar.js";
 import { handleUpload } from "./functionality/handleUpload.js";
-import API from "./api.js";
 import { handleSettings } from "./functionality/handleSettings.js";
+import API from "./api.js";
 
 const routes = [
     { path: "/", component: Login },
@@ -44,31 +44,32 @@ const router = () => {
     // check path and append components accordingly
     if (path === "/register") {
         root.appendChild(component.render());
-        handleRegister(api);
+        handleRegister();
     } else if (path === "/login" || path === "/") {
         root.appendChild(component.render());
-        handleLogin(api);
+        handleLogin();
     } else if (path === "/feed") {
         root.appendChild(Navbar.render());
         root.appendChild(component.render());
-        handleNavbar(api);
-        handleFeed(api);
+        handleNavbar();
+        handleFeed();
     } else if (path.startsWith("/profile")) {
         root.appendChild(Navbar.render());
-        root.appendChild(Profile.render(api));
-        handleNavbar(api);
-        handleProfile(api);
+        root.appendChild(Profile.render());
+        handleNavbar();
+        handleProfile();
     } else if (path === "/upload") {
         root.appendChild(Navbar.render());
-        root.appendChild(component.render(api));
-        handleNavbar(api);
-        handleUpload(api);
+        root.appendChild(component.render());
+        handleNavbar();
+        handleUpload();
     } else if (path === "/settings") {
         root.appendChild(Navbar.render());
-        root.appendChild(component.render(api));
-        handleNavbar(api);
-        handleSettings(api);
+        root.appendChild(component.render());
+        handleNavbar();
+        handleSettings();
     } else {
+        root.appendChild(Navbar.render());
         root.appendChild(Error.render());
     }
 };

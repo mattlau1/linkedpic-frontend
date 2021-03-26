@@ -1,5 +1,4 @@
-import { createAlert } from "../helpers.js";
-import { handleScroll } from "./handleScroll.js";
+import { createAlert, handleScroll } from "../helpers.js";
 
 // load and handle settings page functionality
 export const handleSettings = () => {
