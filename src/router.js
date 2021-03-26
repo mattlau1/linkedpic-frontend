@@ -39,7 +39,6 @@ const router = () => {
     }
     root.appendChild(Alert.render());
     root.appendChild(Modal.render());
-    window.api = api;
 
     // check path and append components accordingly
     if (path === "/register") {
