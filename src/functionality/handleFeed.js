@@ -69,6 +69,7 @@ export const loadFeed = (start, fetchLimit, token) => {
                             "author-img"
                         );
                         authorImg.src = "../images/profile.jpg";
+                        authorImg.alt = `${post.meta.author}'s profile picture`;
 
                         // author name
                         const authorName = document.createElement("p");
@@ -98,6 +99,7 @@ export const loadFeed = (start, fetchLimit, token) => {
                         postedImg.classList.add("rounded");
                         postedImg.id = "postimg";
                         postedImg.src = `data:image/jpg;base64,${post.src}`;
+                        postedImg.alt = `${post.meta.author}'s post`;
 
                         const imgContainer = document.createElement("div");
                         imgContainer.classList.add("col-md-8", "p-0");
