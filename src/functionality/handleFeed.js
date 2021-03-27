@@ -414,9 +414,10 @@ const setCommentModal = (comments, postId, token) => {
         body.innerText = "";
     }
 
+    // add functionality to comment button
     handleCommentButton(commentInput, postId, token);
 
-    // go through each comment
+    // go through each comment and show comments
     let commentCounter = 1;
     comments.map((comment) => {
         const commentContainer = document.createElement("div");
@@ -431,9 +432,7 @@ const setCommentModal = (comments, postId, token) => {
         const commentDate = document.createElement("div");
         commentDate.classList.add("col-md-4", "fw-bold");
         commentDate.id = "commentdate";
-
-        const date = new Date(comment.published * 1000);
-        commentDate.innerText = `${date.toLocaleDateString("en-GB")}`;
+        commentDate.innerText = getDate(comment.published);
 
         // set comment content
         const commentContent = document.createElement("div");
