@@ -18,7 +18,7 @@ i {
 }
 
 .bg {
-    background: url(../background.jpg);
+    background: url(../images/background.jpg);
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -36,6 +36,11 @@ i {
 
 .registration-form {
     background-color: rgba(30, 30, 30, 0.7);
+}
+
+.author-img {
+    height: 50px;
+    width: 50px;
 }
 
 .comment-content {
@@ -152,10 +157,6 @@ i {
 
 #authorname {
     padding-left: 10px;
-}
-
-#likePost {
-    display: none;
 }
 
 #commentdate {

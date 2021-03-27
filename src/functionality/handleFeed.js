@@ -1,4 +1,9 @@
-import { getCurrentUsername, createAlert, handleScroll } from "../helpers.js";
+import {
+    getCurrentUsername,
+    createAlert,
+    handleScroll,
+    getDate,
+} from "../helpers.js";
 
 // load and handle feed page functionality
 export const handleFeed = () => {
@@ -40,17 +45,38 @@ export const loadFeed = (start, fetchLimit, token) => {
             } else if (data.status === 200) {
                 data.json().then((result) => {
                     result.posts.map((post) => {
-                        // author information section
-                        const postContainer = document.createElement("div");
-                        postContainer.classList.add("row", "md-12");
+                        const dateContainer = document.createElement("div");
+                        dateContainer.classList.add(
+                            "col-md-2",
+                            "d-flex",
+                            "flex-column",
+                            "justify-content-center",
+                            "align-items-end",
+                            "px-0"
+                        );
 
-                        // create left and right column gaps
-                        const leftColGap = document.createElement("div");
-                        leftColGap.classList.add("col-md-2", "col-xs-1");
+                        // post date
+                        const date = document.createElement("p");
+                        date.classList.add("my-0");
+                        date.innerText = getDate(post.meta.published);
+                        dateContainer.appendChild(date);
 
-                        const rightColGap = document.createElement("div");
-                        rightColGap.classList.add("col-md-2", "col-xs-1");
+                        // author profile picture
+                        const authorImg = document.createElement("img");
+                        authorImg.classList.add(
+                            "rounded-circle",
+                            "md-8",
+                            "author-img"
+                        );
+                        authorImg.src = "../images/profile.jpg";
 
+                        // author name
+                        const authorName = document.createElement("p");
+                        authorName.classList.add("d-inline", "fw-bold");
+                        authorName.id = "authorname";
+                        authorName.innerText = post.meta.author;
+
+                        // author info section
                         const authorInfoArea = document.createElement("div");
                         authorInfoArea.classList.add(
                             "col-md-6",
@@ -64,69 +90,26 @@ export const loadFeed = (start, fetchLimit, token) => {
                             window.location.hash = `#/profile/${post.meta.author}`;
                         });
 
-                        // author profile picture
-                        const authorImg = document.createElement("img");
-                        authorImg.classList.add("rounded-circle", "md-8");
-                        authorImg.height = "50";
-                        authorImg.width = "50";
-                        authorImg.src =
-                            "https://raw.githubusercontent.com/mattlau1/jas/main/jas.png";
+                        authorInfoArea.appendChild(authorImg);
+                        authorInfoArea.appendChild(authorName);
 
-                        // author name
-                        const authorName = document.createElement("p");
-                        authorName.classList.add("d-inline", "fw-bold");
-                        authorName.id = "authorname";
-
-                        // post date
-                        const date = new Date(post.meta.published * 1000);
-                        authorName.innerText = `${
-                            post.meta.author
-                        } (${date.toLocaleDateString("en-GB")})`;
-
-                        // post image container
-                        const imgContainer = document.createElement("div");
-                        imgContainer.classList.add("col-md-8", "p-0");
-
+                        // post image
                         const postedImg = document.createElement("img");
                         postedImg.classList.add("rounded");
                         postedImg.id = "postimg";
                         postedImg.src = `data:image/jpg;base64,${post.src}`;
 
-                        const leftColGap2 = document.createElement("div");
-                        leftColGap2.classList.add("col-md-2", "col-xs-1");
+                        const imgContainer = document.createElement("div");
+                        imgContainer.classList.add("col-md-8", "p-0");
+                        imgContainer.appendChild(postedImg);
 
-                        const rightColGap2 = document.createElement("div");
-                        rightColGap2.classList.add("col-md-2", "col-xs-1");
-
-                        // button area section
-                        const buttonArea = document.createElement("div");
-                        buttonArea.id = "button-area";
-                        buttonArea.classList.add("row", "md-12", "p-0");
-
-                        const leftColGap3 = document.createElement("div");
-                        leftColGap3.classList.add("col-md-2", "col-xs-1");
-
-                        const rightColGap3 = document.createElement("div");
-                        rightColGap3.classList.add("col-md-2", "col-xs-1");
-
-                        const buttonContainer = document.createElement("div");
-                        buttonContainer.classList.add(
-                            "col",
-                            "md-6",
-                            "text-center"
-                        );
-
-                        // number of likes
+                        // Like(s) text
                         const noLikes = document.createElement("span");
-
-                        // if the number of likes is 1 then show "1 Like"
-                        // else show "n Likes"
                         noLikes.innerText = `${post.meta.likes.length} ${
                             post.meta.likes.length === 1 ? "Like" : "Likes"
                         }`;
 
-                        // if the number of comments is 1 then show "1 Comment"
-                        // else show "n Comments"
+                        // Comment(s) text
                         const noComments = document.createElement("span");
                         noComments.innerText = `${post.comments.length} ${
                             post.comments.length === 1 ? "Comment" : "Comments"
@@ -145,6 +128,8 @@ export const loadFeed = (start, fetchLimit, token) => {
                         likeButton.setAttribute("data-bs-toggle", "modal");
                         likeButton.setAttribute("data-bs-target", "#modal");
                         likeButton.setAttribute("data-likes-id", post.id);
+
+                        // live update for likes
                         likeButton.addEventListener("click", () => {
                             // object of post information
                             const postInfo = {
@@ -164,6 +149,8 @@ export const loadFeed = (start, fetchLimit, token) => {
 
                             setLikeModal(postInfo.postLikes, token, post.id);
                         });
+                        likeButton.appendChild(likeIcon);
+                        likeButton.appendChild(noLikes);
 
                         // comments button
                         const commentIcon = document.createElement("i");
@@ -178,6 +165,8 @@ export const loadFeed = (start, fetchLimit, token) => {
                         commentButton.setAttribute("data-bs-toggle", "modal");
                         commentButton.setAttribute("data-bs-target", "#modal");
                         commentButton.setAttribute("data-comment-id", post.id);
+
+                        // live update for comments
                         commentButton.addEventListener("click", () => {
                             // object of post information
                             const postInfo = {
@@ -202,43 +191,78 @@ export const loadFeed = (start, fetchLimit, token) => {
                             );
                         });
 
+                        commentButton.appendChild(commentIcon);
+                        commentButton.appendChild(noComments);
+
+                        // button container
+                        const leftColGap3 = document.createElement("div");
+                        leftColGap3.classList.add("col-md-2");
+
+                        const rightColGap3 = document.createElement("div");
+                        rightColGap3.classList.add("col-md-2");
+
+                        const buttonContainer = document.createElement("div");
+                        buttonContainer.classList.add(
+                            "col",
+                            "md-6",
+                            "text-center"
+                        );
+
+                        buttonContainer.appendChild(likeButton);
+                        buttonContainer.appendChild(commentButton);
+
+                        // button area
+                        const buttonArea = document.createElement("div");
+                        buttonArea.id = "button-area";
+                        buttonArea.classList.add("row", "md-12", "p-0");
+
+                        buttonArea.appendChild(leftColGap3);
+                        buttonArea.appendChild(buttonContainer);
+                        buttonArea.appendChild(rightColGap3);
+
                         // post description area
-                        const descriptionArea = document.createElement("div");
-                        descriptionArea.classList.add("row", "md-12");
-
                         const leftColGap4 = document.createElement("div");
-                        leftColGap4.classList.add("col-md-2", "col-xs-1");
-
-                        const descriptionDiv = document.createElement("div");
-                        descriptionDiv.classList.add("col-md-8");
+                        leftColGap4.classList.add("col-md-2");
 
                         const descriptionText = document.createElement("p");
                         descriptionText.classList.add("d-inline");
                         descriptionText.innerText = post.meta.description_text;
 
+                        const descriptionDiv = document.createElement("div");
+                        descriptionDiv.classList.add("col-md-8", "px-0");
+                        descriptionDiv.appendChild(descriptionText);
+
+                        const descriptionArea = document.createElement("div");
+                        descriptionArea.classList.add(
+                            "row",
+                            "md-12",
+                            "ms-0",
+                            "px-0"
+                        );
+                        descriptionArea.appendChild(leftColGap4);
+                        descriptionArea.appendChild(descriptionDiv);
+
                         // horizontal rule
                         const hr = document.createElement("hr");
                         hr.classList.add("mt-5", "mb-5");
 
-                        // stick everything together
-                        postContainer.appendChild(leftColGap);
+                        // column gaps
+                        const leftColGap1 = document.createElement("div");
+                        leftColGap1.classList.add("col-md-2");
+
+                        const leftColGap2 = document.createElement("div");
+                        leftColGap2.classList.add("col-md-2");
+
+                        const rightColGap2 = document.createElement("div");
+                        rightColGap2.classList.add("col-md-2");
+
+                        // post container
+                        const postContainer = document.createElement("div");
+                        postContainer.classList.add("row", "md-12");
+
+                        postContainer.appendChild(leftColGap1);
                         postContainer.appendChild(authorInfoArea);
-                        postContainer.appendChild(rightColGap);
-                        descriptionDiv.appendChild(descriptionText);
-                        descriptionArea.appendChild(leftColGap4);
-                        descriptionArea.appendChild(descriptionDiv);
-                        likeButton.appendChild(likeIcon);
-                        likeButton.appendChild(noLikes);
-                        commentButton.appendChild(commentIcon);
-                        commentButton.appendChild(noComments);
-                        buttonContainer.appendChild(likeButton);
-                        buttonContainer.appendChild(commentButton);
-                        buttonArea.appendChild(leftColGap3);
-                        buttonArea.appendChild(buttonContainer);
-                        buttonArea.appendChild(rightColGap3);
-                        imgContainer.appendChild(postedImg);
-                        authorInfoArea.appendChild(authorImg);
-                        authorInfoArea.appendChild(authorName);
+                        postContainer.appendChild(dateContainer);
                         postContainer.appendChild(descriptionArea);
                         postContainer.appendChild(leftColGap2);
                         postContainer.appendChild(imgContainer);

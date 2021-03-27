@@ -44,3 +44,19 @@ export const handleScroll = () => {
         loadFeed(window.start, window.feedFetchLimit, token);
     }
 };
+
+// formats current time and date from given unix timestamp
+export const getDate = (time) => {
+    const date = new Date(time * 1000);
+    const postDay = date.getDate();
+    const postMonth = date.getMonth() + 1;
+    const postYear = date.getFullYear();
+    let postHours = date.getHours();
+    let postMins = date.getMinutes();
+    const postAmPm = postHours >= 12 ? "PM" : "AM";
+    postHours %= 12;
+    postHours = postHours ? postHours : 12;
+    postMins = postMins < 10 ? "0" + postMins : postMins;
+
+    return `${postDay}/${postMonth}/${postYear} ${postHours}:${postMins} ${postAmPm}`;
+};
