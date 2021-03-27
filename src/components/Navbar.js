@@ -103,7 +103,7 @@ const Navbar = {
         const rightNav = document.createElement("ul");
         rightNav.className = "navbar-nav me-auto";
 
-        const rightNavItems = document.createElement("div");
+        const rightNavItems = document.createElement("li");
         rightNavItems.className = "collapse navbar-collapse";
         rightNavItems.id = "navbarSupportedContent";
 

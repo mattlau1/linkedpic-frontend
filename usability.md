@@ -14,3 +14,4 @@
 - Text is always present next to icons to help user understand what the button/link is for
 - There is always a label or placeholder for every input
 - Searching for users, commenting on a post or posting an image can be submitted without using a mouse (with Enter key)
+- All images have an alt text

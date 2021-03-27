@@ -19,6 +19,7 @@ export const handleUpload = () => {
 
         if (img) {
             imgReader.readAsDataURL(img);
+            imgPreview.classList.remove("d-none");
         } else {
             imgPreview.src = "";
         }
@@ -65,6 +66,7 @@ export const handleUpload = () => {
                         // reset upload form
                         document.getElementById("upload-form").reset();
                         imgPreview.src = "";
+                        imgPreview.classList.add("d-none");
                     }
                 })
                 .catch((error) => {

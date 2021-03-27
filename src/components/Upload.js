@@ -31,7 +31,7 @@ const Upload = {
 
         // image input box
         const fileLabel = document.createElement("label");
-        fileLabel.setAttribute("for", "file");
+        fileLabel.setAttribute("for", "file-input");
         fileLabel.className = "form-label";
         fileLabel.innerText = "Upload an Image";
 
@@ -57,8 +57,9 @@ const Upload = {
         previewContainer.className = "col-md-12";
 
         const previewImg = document.createElement("img");
-        previewImg.className = "w-50 mb-4";
+        previewImg.className = "w-50 mb-4 d-none";
         previewImg.id = "img-preview";
+        previewImg.alt = "Image Preview";
 
         previewContainer.appendChild(previewImg);
 

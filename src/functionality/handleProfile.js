@@ -25,7 +25,7 @@ export const handleProfile = () => {
             } else if (data.status === 200) {
                 data.json().then((result) => {
                     // username of profile
-                    const usernameText = document.createElement("div");
+                    const usernameText = document.createElement("h1");
                     usernameText.className = "display-1 text-center";
                     usernameText.innerText = result.username;
 
@@ -206,6 +206,7 @@ const addProfileImages = (postIds, token) => {
                         const img = document.createElement("img");
                         img.className = "post-img rounded";
                         img.src = `data:image/jpg;base64,${result.src}`;
+                        img.alt = "Post Image";
 
                         const imgDescription = document.createElement("p");
 
