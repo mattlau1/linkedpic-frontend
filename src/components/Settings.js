@@ -1,3 +1,4 @@
+// renders static html elements for the settings page
 const Settings = {
     render: () => {
         // title

@@ -1,3 +1,4 @@
+// renders static html elements for the login page
 const Login = {
     render: () => {
         // title

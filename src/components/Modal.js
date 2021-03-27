@@ -1,3 +1,4 @@
+// renders static html elements for the modal
 const Modal = {
     render: () => {
         // modal header

@@ -1,3 +1,4 @@
+// renders static html elements for the error page
 const Error = {
     render: () => {
         const text = document.createElement("div");

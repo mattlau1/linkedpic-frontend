@@ -1,3 +1,4 @@
+// renders static html elements for the profile page
 const Profile = {
     render: () => {
         const profile = document.createElement("div");

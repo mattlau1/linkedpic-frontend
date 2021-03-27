@@ -1,3 +1,4 @@
+// renders static html elements for the feed page
 const Feed = {
     render: () => {
         const feed = document.createElement("div");

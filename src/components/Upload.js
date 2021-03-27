@@ -1,3 +1,4 @@
+// renders static html elements for the upload page
 const Upload = {
     render: () => {
         // title

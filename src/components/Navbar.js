@@ -1,3 +1,4 @@
+// renders static html elements for the navbar
 const Navbar = {
     render: () => {
         // navbar container

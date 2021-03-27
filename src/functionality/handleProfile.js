@@ -184,6 +184,8 @@ export const handleProfile = () => {
 };
 
 // adds profile images to page, given postids
+/** @param {Array} postIds */
+/** @param {String} token */
 const addProfileImages = (postIds, token) => {
     postIds.map((postId) => {
         window.api
@@ -229,6 +231,8 @@ const addProfileImages = (postIds, token) => {
 };
 
 // sets modal information to list of users that the user is following
+/** @param {Array} userIds */
+/** @param {String} token */
 const setFollowingModal = (userIds, token) => {
     const header = document.getElementById("main-modal");
     const body = document.getElementById("modal-text");
@@ -282,6 +286,9 @@ const setFollowingModal = (userIds, token) => {
 };
 
 // handles all the buttons on a user's profile page
+/** @param {Object} followBtn */
+/** @param {Object} unfollowBtn */
+/** @param {String} token */
 const handleProfileBtns = (followBtn, unfollowBtn, token) => {
     const currPath = window.location.hash;
     const username = currPath.substring(currPath.lastIndexOf("/") + 1);
@@ -355,6 +362,10 @@ const handleProfileBtns = (followBtn, unfollowBtn, token) => {
 };
 
 // turns follow button on, turns unfollow button off
+/** @param {Object} followBtn */
+/** @param {Object} unfollowBtn */
+/** @param {String} username */
+/** @param {String} token */
 const handleFollowButton = (followBtn, unfollowBtn, username, token) => {
     followBtn.addEventListener("click", () => {
         followBtn.classList.add("d-none");
@@ -384,6 +395,10 @@ const handleFollowButton = (followBtn, unfollowBtn, username, token) => {
 };
 
 // turns unfollow button on, turns follow button off
+/** @param {Object} followBtn */
+/** @param {Object} unfollowBtn */
+/** @param {String} username */
+/** @param {String} token */
 const handleUnfollowButton = (followBtn, unfollowBtn, username, token) => {
     unfollowBtn.addEventListener("click", () => {
         // flip buttons
@@ -420,6 +435,10 @@ const handleUnfollowButton = (followBtn, unfollowBtn, username, token) => {
 
 // when remove button is clicked, sends delete request to backend
 // to remove post and then removes the post from the DOM
+/** @param {Object} button */
+/** @param {Number} postId */
+/** @param {Object} post */
+/** @param {String} token */
 const handleRemoveButton = (button, postId, post, token) => {
     button.addEventListener("click", (e) => {
         e.preventDefault();
@@ -450,6 +469,7 @@ const handleRemoveButton = (button, postId, post, token) => {
 
 // adds functionality to edit and remove buttons and adds them to the page
 // remove button removes post from the DOM
+/** @param {String} token */
 const addProfilePostButtons = (token) => {
     const imgContainer = document.querySelectorAll(".profile-img-container");
 
@@ -497,6 +517,8 @@ const addProfilePostButtons = (token) => {
 };
 
 // flips/toggles edit & finish edit button, adds input field
+/** @param {Object} editBtn */
+/** @param {Object} finEditBtn */
 const handleEditBtn = (editBtn, finEditBtn) => {
     editBtn.addEventListener("click", (e) => {
         e.preventDefault();
@@ -525,6 +547,10 @@ const handleEditBtn = (editBtn, finEditBtn) => {
 };
 
 // flips/toggles edit & finish edit button, sends put request to edit post
+/** @param {Object} editBtn */
+/** @param {Object} finEditBtn */
+/** @param {Number} postId */
+/** @param {String} token */
 const handleFinEditBtn = (editBtn, finEditBtn, postId, token) => {
     finEditBtn.addEventListener("click", (e) => {
         e.preventDefault();

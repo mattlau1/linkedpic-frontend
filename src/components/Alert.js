@@ -1,3 +1,4 @@
+// renders static html elements for alerts
 const Alert = {
     render: () => {
         const alert = document.createElement("div");

@@ -1,3 +1,4 @@
+// renders static html elements for the register page
 const Register = {
     render: () => {
         // title
