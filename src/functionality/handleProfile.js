@@ -73,11 +73,10 @@ export const handleProfile = () => {
                     followingStatContainer.className = "col-md-2";
 
                     const followingStat = document.createElement("div");
-                    followingStat.id = "following";
                     followingStat.setAttribute("data-bs-toggle", "modal");
                     followingStat.setAttribute("data-bs-target", "#modal");
                     followingStat.className =
-                        "p2 profile-info text-center fw-bold";
+                        "p2 profile-info text-center fw-bold following";
                     followingStat.innerText = `${result.following.length} Following`;
 
                     setFollowingModal(result.following, token);
@@ -257,6 +256,15 @@ const setFollowingModal = (userIds, token) => {
                 } else if (data.status === 200) {
                     data.json().then((result) => {
                         const userContainer = document.createElement("p");
+                        userContainer.className = "d-block fw-bold following";
+
+                        // make users clickable
+                        userContainer.addEventListener("click", () => {
+                            window.location = `#/profile/${result.username}`;
+                        });
+
+                        // close modal if clicked
+                        userContainer.setAttribute("data-bs-dismiss", "modal");
                         userContainer.innerText = result.username;
                         body.appendChild(userContainer);
                     });

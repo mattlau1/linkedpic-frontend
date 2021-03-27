@@ -53,7 +53,7 @@ export const handleRegister = () => {
                 }
             })
             .catch((error) => {
-                createAlert(`${error}\nIs the backend running?`, "danger");
+                createAlert(`Error registering`, "danger");
                 console.warn(error);
             });
     });

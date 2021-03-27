@@ -31,7 +31,7 @@ export const handleLogin = () => {
                 }
             })
             .catch((error) => {
-                createAlert(`${error}\nIs the backend running?`, "danger");
+                createAlert(`Error logging in`, "danger");
                 console.warn(error);
             });
     });

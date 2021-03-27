@@ -111,6 +111,10 @@ i {
     color: white;
 }
 
+.following {
+    cursor: pointer;
+}
+
 #copyright {
     position: absolute;
     bottom: 0;
@@ -146,10 +150,6 @@ i {
     cursor: pointer;
 }
 
-#following {
-    text-align: right;
-}
-
 #authorname {
     padding-left: 10px;
 }
@@ -162,10 +162,6 @@ i {
     padding: 0;
     padding-right: 10px;
     text-align: right;
-}
-
-#following {
-    cursor: pointer;
 }
 
 #navbar-searchbar {
