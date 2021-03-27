@@ -27,6 +27,9 @@ export const handleFeed = () => {
 
 // fetches fetchLimit amount of feeds from index start via GET request
 // and appends this information to the DOM
+/** @param {Number} start */
+/** @param {Number} fetchLimit */
+/** @param {String} token */
 export const loadFeed = (start, fetchLimit, token) => {
     const feed = document.getElementById("feed");
     const body = document.querySelector("body");
@@ -149,7 +152,7 @@ export const loadFeed = (start, fetchLimit, token) => {
                                 window.postLikes.push(postInfo);
                             }
 
-                            setLikeModal(postInfo.postLikes, token, post.id);
+                            setLikeModal(postInfo.postLikes, post.id, token);
                         });
                         likeButton.appendChild(likeIcon);
                         likeButton.appendChild(noLikes);
@@ -289,7 +292,10 @@ export const loadFeed = (start, fetchLimit, token) => {
 };
 
 // sets like information on modal for the given post
-const setLikeModal = (userIds, token, postId) => {
+/** @param {Array} userIds */
+/** @param {Number} postId */
+/** @param {String} token */
+const setLikeModal = (userIds, postId, token) => {
     const header = document.getElementById("main-modal");
     const body = document.getElementById("modal-text");
     const likeBtn = document.getElementById("like-post-btn");
@@ -353,6 +359,8 @@ const setLikeModal = (userIds, token, postId) => {
 };
 
 // likes a post with postId given a user token
+/** @param {Number} postId */
+/** @param {String} token */
 const handleLikeBtn = (postId, token) => {
     window.api
         .putAPIRequestTokenQuery("post/like", { id: postId }, token)
@@ -373,7 +381,7 @@ const handleLikeBtn = (postId, token) => {
                         !postObj.postLikes.includes(window.userId)
                     ) {
                         postObj.postLikes.push(window.userId);
-                        setLikeModal(postObj.postLikes, token, postId);
+                        setLikeModal(postObj.postLikes, postId, token);
 
                         const postLikeBtnText = document
                             .querySelector(`button[data-likes-id="${postId}"]`)
@@ -398,6 +406,9 @@ const handleLikeBtn = (postId, token) => {
 };
 
 // sets information relating to post comments into modal
+/** @param {Array} comments */
+/** @param {Number} postId */
+/** @param {String} token */
 const setCommentModal = (comments, postId, token) => {
     const header = document.getElementById("main-modal");
     const body = document.getElementById("modal-text");
@@ -463,6 +474,9 @@ const setCommentModal = (comments, postId, token) => {
 
 // handles click of send comment button
 // gets comment from input field, sends put request to server
+/** @param {Object} container */
+/** @param {Number} postId */
+/** @param {String} token */
 const handleCommentButton = (container, postId, token) => {
     const button = container
         .querySelector(".input-group-btn")
