@@ -1,7 +1,7 @@
 const Upload = {
     render: () => {
         // title
-        const title = document.createElement("div");
+        const title = document.createElement("h1");
         title.className = "display-4 text-center";
         title.innerText = "Create Post";
 
