@@ -1,1 +1,1 @@
-# LinkedPic, a instagram clone written in vanilla JS!
+# LinkedPic, an instagram clone
